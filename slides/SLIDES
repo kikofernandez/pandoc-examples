@@ -1,0 +1,122 @@
+% Case Study 3
+% Kiko Fernandez Reyes
+% Sept 27, 2017
+
+# Tracking Wine
+
+## Overview
+
+- Groups of 4 - 5 people
+- 1st hour:
+    - Requirements
+    - Design activity diagram
+- break
+- 2nd hour:
+    - Discussion: another group's design
+    - Design class diagram
+    - Discussion: another group's design
+
+# Case Study
+
+## <img src="img/SwissFlag.png" style="vertical-align:middle"/> Startup Idea
+
+>- Swiss love their **wine** and cheese
+>- Let's create a *simple* wine tracker system
+
+![](img/matterhorn.jpg)
+
+## La Cave Vivante
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/IsaW8wF2hbg" frameborder="0" allowfullscreen></iframe>
+
+## Simple idea
+
+>- Bottles have a RFID tag
+>- RFID reader (emits and read signal)
+>- **Raspberry Pi**
+>- **Server (online shop)**
+>- Mobile app
+
+## Simple idea
+
+<img src="img/wineBefore.png" style="border:none"/>
+
+## Simple idea
+
+<img src="img/wineAfter.png" style="border:none"/>
+
+## Requirements I
+
+The Raspberry Pi needs to handle:
+
+>- Bottles in
+>- Bottles out
+>- Communication with server
+>- Addition: Cellar identity (update cellar)
+>- Addition: Employees have Tag (identity)
+>- Important: Unreachable server?
+
+<div class="notes">
+  What happens when the server is unreachable?
+</div>
+
+## Requirements II
+
+The online shop needs to handle:
+
+>- credit cards,
+>- invoices,
+>- manage cellar (incr / dec)
+>- auto-order ( #wine < 5 => send more)
+>- auto-order alerts (emails, sms, etc)
+>- drink with responsibility alarm
+>- ...
+
+
+## Activity Diagram
+
+![](img/ActivityDiagram.jpeg)
+
+>- <span style="font-size: 25pt">Models control flow (of sequence) of activities</span>
+>- <span style="font-size: 25pt">Represents business ideas rather than implementation</span>
+>- <span style="font-size: 25pt">High level understanding</span>
+
+## Activity Diagram (work in groups)
+
+## Break
+
+
+## Class Diagram
+
+- Static view of the application
+- Represent software entities (classes, interfaces, etc)
+- High level overview of the implementation [1]
+
+<span style="font-size: 20pt">
+     [1]: [Does the level of detail of {UML} diagrams affect the
+     maintainability of source code?: a family of experiments](https://doi.org/10.1007/s10664-014-9354-4)
+</span>
+
+## Class Diagram (work in groups)
+
+## Hint: Domain objects
+
+>- Wine
+>- Tag ID
+>- Location
+>- Region
+>- Cellar
+>- Type of grape
+>- User
+>- RFID reader (polls data)
+>- Server (where to send data)
+>- Online shop (credit card, emails, sms, alerts)
+
+## Conclusion
+
+- Activity diagram
+    - convey general idea (business)
+    - sequence of steps
+- Static diagram
+    - models software entities
+    - static view
