@@ -274,49 +274,6 @@ Address  & \hspace{3cm} & Address \\
 1. Scope of work
 
     The Contractor will provide to The Customer the services of software
-    development for the Tic-Tac toe game (Exhibit B).
+    development for the Tic-Tac toe game.
 
 2. Prices include VAT
-
-
-
-\newpage
-
-
-\begin{center}
-{\Large Exhibit B}
-\end{center}
-
-The software provided by the Contractor, delivering the *game engine*,
-needs to fulfil the following requirements and tests.
-
-### Requirements for Game Engine:
-
-1. The game engine needs to provide the following API:
-     * `giveNextMove(*args, **kwargs)`: this function receives the board as a
-     matrix, i.e. `[[0, X, O],[O, X, O], [X, 7, 8]]`, where the `X` and `O`
-     represent the pieces in the board, and a `String` with symbol `X` or `O`
-     to indicate that the AI needs to play for `X`. The AI returns a list with
-     the same format and a new `X` in one of the available spaces.
-     * `AIvsAI()`, which receives no arguments and returns a list of lists
-     containing the movements of `X` and `O` in each turn, e.g.
-
-
-            [[X, 1], [O, 0], [X, 4], [O, 2], [X, 7]]
-
-
-     * `setDifficulty(int)`, where I can set the difficulty of the AI and change
-     as I wish during the game.
-
-2. Tests:
-    * If I pass a finished game state to the AI, the AI must reply with an empty list.
-    * The set difficulty can be set to 0, 1 or 2. Setting the difficulty to any
-    other value sets the difficulty to 1 by default.
-    * In a tournament, and after setting the AI to level 2, I want the AI to
-    reduce its difficulty linearly every two draws of the same players, given
-    that in my tournament a draw means a rematch.
-
-3. Payment conditions
-    * If the requirements are not met, the Contractor will pay back *5 Uppsalines* per missing requirement.
-    * If a test is not satisfied, we provide the code to the Contractor and the
-    Contractor has 24h from the moment the email has been sent to fix the error.
