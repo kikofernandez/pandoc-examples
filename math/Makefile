@@ -1,6 +1,6 @@
 all: math
 
-math: pandoc
+math:
 	pandoc math.tex -s --mathml  -o mathMathML.html
 
 clean: mathMathML.html
