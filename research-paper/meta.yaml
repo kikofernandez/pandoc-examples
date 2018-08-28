@@ -1,0 +1,76 @@
+---
+data-dir: 'data-dir'
+template: 'mytemplate.tex'
+documentclass: acmart
+classoption: sigconf
+title: The impact of opt-in gamification on students' grades in a software design course
+author:
+- name: Kiko Fernandez-Reyes
+  affiliation: Uppsala University
+  email: kiko.fernandez@it.uu.se
+- name: Dave Clarke
+  affiliation: Uppsala University
+  email: dave.clarke@it.uu.se
+- name: Janina Hornbach
+  affiliation: Uppsala University
+  email: janina.hornbach@fek.uu.se
+link-citations: true
+bibliography: biblio.bib
+abstract: |
+  An achievement-driven methodology strives to give students more control of their learning with enough flexibility to engage them in deeper learning.
+
+  We observed in the course Advanced Software Design, which uses the achievement-driven methodology, that students fail to get high grades, which may hamper deeper learning.
+  To motivate students to pursue and get higher grades we added gamification elements to the course.
+
+  To measure the success of our gamification implementation,
+  students filled out a questionaire rating the enjoyment and motivation produced by the game.
+  We built a statistical regression model where enjoyment and motivation explain 55\% of the variation in grades.
+  However, only the relationship between motivation and grade is significant, which implies that notivation drives the overall effect of the model.
+  The results suggest that the more the students were motivated by the game, the higher their grades on the course (and vice versa).
+  This implies that if gamification indeed motivates students, then it makes them go beyond what is expected.
+
+header-includes: |
+  ```{=latex}
+  \usepackage{multirow,graphicx}
+  \usepackage{hyperref}
+  \copyrightyear{2018}
+  \acmYear{2018}
+  \setcopyright{acmlicensed}
+  \acmConference[MODELS '18 Companion]{ACM/IEEE 21th International Conference on Model Driven Engineering Languages and Systems}{October 14--19, 2018}{Copenhagen, Denmark}
+  \acmBooktitle{ACM/IEEE 21th International Conference on Model Driven Engineering Languages and Systems (MODELS '18 Companion), October 14--19, 2018, Copenhagen, Denmark}
+  \acmPrice{15.00}
+  \acmDOI{10.1145/3270112.3270118}
+  \acmISBN{978-1-4503-5965-8/18/10}
+
+  \begin{CCSXML}
+  <ccs2012>
+  <concept>
+  <concept_id>10010405.10010489</concept_id>
+  <concept_desc>Applied computing~Education</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  <concept>
+  <concept_id>10003456.10003457.10003527.10003531.10003751</concept_id>
+  <concept_desc>Social and professional topics~Software engineering education</concept_desc>
+  <concept_significance>300</concept_significance>
+  </concept>
+  <concept>
+  <concept_id>10011007.10011006.10011060.10011061</concept_id>
+  <concept_desc>Software and its engineering~Unified Modeling Language (UML)</concept_desc>
+  <concept_significance>300</concept_significance>
+  </concept>
+  </ccs2012>
+  \end{CCSXML}
+
+  \ccsdesc[500]{Applied computing~Education}
+  \ccsdesc[300]{Social and professional topics~Software engineering education}
+  \ccsdesc[300]{Software and its engineering~Unified Modeling Language (UML)}
+
+
+  \keywords{gamification, education, software design, UML}
+  ```
+csl: acm-sig-proceedings.csl
+secPrefix:
+  - "Section"
+  - "Sections"
+...
