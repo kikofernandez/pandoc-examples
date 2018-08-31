@@ -1,7 +1,3 @@
-% Contract Agreement
-% Kiko Fernandez-Reyes
-% August 28, 2018
-
 ## 1. Terms and conditions
 
 **Definitions**
