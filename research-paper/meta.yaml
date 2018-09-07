@@ -1,9 +1,8 @@
 ---
-data-dir: 'data-dir'
 template: 'mytemplate.tex'
 documentclass: acmart
 classoption: sigconf
-title: The impact of opt-in gamification on students' grades in a software design course
+title: The impact of opt-in gamification on `\\`{=latex} students' grades in a software design course
 author:
 - name: Kiko Fernandez-Reyes
   affiliation: Uppsala University
@@ -29,10 +28,8 @@ abstract: |
   The results suggest that the more the students were motivated by the game, the higher their grades on the course (and vice versa).
   This implies that if gamification indeed motivates students, then it makes them go beyond what is expected.
 
-header-includes: |
+include-before: |
   ```{=latex}
-  \usepackage{multirow,graphicx}
-  \usepackage{hyperref}
   \copyrightyear{2018}
   \acmYear{2018}
   \setcopyright{acmlicensed}
@@ -69,7 +66,7 @@ header-includes: |
 
   \keywords{gamification, education, software design, UML}
   ```
-csl: acm-sig-proceedings.csl
+csl: association-for-computing-machinery.csl
 secPrefix:
   - "Section"
   - "Sections"
