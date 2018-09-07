@@ -264,7 +264,7 @@ All the code can be found in [this repository](https://github.com/kikofernandez/
 
 Lets say that you are preparing a document and, as things are nowadays,
 some people would like to get the document in Microsoft Word docx,
-some others use free software and would like an odp and others
+some others use free software and would like an odt and others
 a PDF. You do not have to use OpenOffice nor LibreOffice to generate a Microsoft Word docx
 document or PDF. You can create your document in Markdown (with some bits
 of LaTeX if you need more advanced formatting) and generate all these files.
@@ -340,10 +340,10 @@ DOCS=contract-agreement.md
 all: $(DOCS)
     pandoc -s $(DOCS) -o $(DOCS:md=pdf)
     pandoc -s $(DOCS) -o $(DOCS:md=docx)
-    pandoc -s $(DOCS) -o $(DOCS:md=odp)
+    pandoc -s $(DOCS) -o $(DOCS:md=odt)
 
 clean:
-    rm *.pdf *.docx *.odp
+    rm *.pdf *.docx *.odt
 
 .PHONY: all clean
 ```
