@@ -54,11 +54,11 @@ combination of achievement that students must explore to construct their own dem
 ## Gamification
 
 Gamification refers to the use of game elements in non-gaming environments [@deterding2011game].
-Gamification in education is not a new idea [@huang2013gamification,@dicheva2015gamification,@gamification-leaderboard-benefits]
+Gamification in education is not a new idea [@huang2013gamification;@dicheva2015gamification;@gamification-leaderboard-benefits]
 and courses that use gamification elements do not put the emphasis on the game,
 rather it uses the game as a motivational and driving factor.
 Thus, the most important benefit is its potential to increase students' motivation
-and engagement [@SEABORN201514,@gamification-leaderboard-benefits].
+and engagement [@SEABORN201514;@gamification-leaderboard-benefits].
 There are two types of gamification: reward-based and meaningful [@oldwine]. Reward-based uses badges,
 leaderboards and achievements -- external elements -- as a way of measuring progress;
 meaningful gamification strategies try to find a connection with the participant -- intrinsic motivation.
@@ -523,7 +523,7 @@ engagement and the possibility of deeper learning.
 
 Gamification of computer science courses that
 add gaming elements often use points, leaderboards and badges
-and report on higher engagement from students [@eng-engineering-gamification,@freitas-twice,@todor,@Villagrasa,@ODonovan].
+and report on higher engagement from students [@eng-engineering-gamification;@freitas-twice;@todor;@Villagrasa;@ODonovan].
 Instead, our work uses similar gaming elements although we measure whether gamification elements
 induce higher grades.
 

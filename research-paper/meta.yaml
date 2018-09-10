@@ -2,6 +2,7 @@
 template: 'mytemplate.tex'
 documentclass: acmart
 classoption: sigconf
+reference-section-title: References
 title: The impact of opt-in gamification on `\\`{=latex} students' grades in a software design course
 author:
 - name: Kiko Fernandez-Reyes
