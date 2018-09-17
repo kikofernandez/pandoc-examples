@@ -104,7 +104,7 @@ may pass an achievement while others will have to try
 again in the next meeting.
 The assessment scheme for the project is based
 on achievement-driven learning [@wrigstad2017mastery],
-as described in Section \ref{subsec:achievement-driven}.
+as described in Section [@sec:achievement-driven].
 There is a total of 21 achievements\footnote{Link to the the overview, achievement goals and requirements: \url{https://goo.gl/CNLLLg}}: 11 achievements
 of level 3, 9 achievements of level 4 and a single individual
 achievement of level 5. There is no exam.

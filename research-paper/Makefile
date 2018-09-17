@@ -1,5 +1,11 @@
 all: paper
 
+# If you decide to go with pandoc-citeproc
+#	pandoc -s -F pandoc-crossref -F pandoc-citeproc meta.yaml --data-dir=data-dir --template=mytemplate.tex -N \
+#	-f markdown -t latex+raw_tex+tex_math_dollars+citations -o main.pdf main.md
+
 paper:
-	pandoc -s -F pandoc-crossref -F pandoc-citeproc meta.yaml --data-dir=data-dir --template=mytemplate.tex -N \
-	 -f markdown -t latex+raw_tex+tex_math_dollars+citations -o main.pdf main.md
+	@pandoc -s -F pandoc-crossref --natbib meta.yaml --data-dir=data-dir --template=mytemplate.tex -N \
+	 -f markdown -t latex+raw_tex+tex_math_dollars+citations -o main.tex main.md
+	@bibtex main &> /dev/null
+	@pdflatex main.tex &> /dev/null

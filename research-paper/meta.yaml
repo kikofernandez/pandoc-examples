@@ -67,7 +67,10 @@ include-before: |
 
   \keywords{gamification, education, software design, UML}
   ```
-csl: association-for-computing-machinery.csl
+
+# Enable for CSL
+#csl: association-for-computing-machinery.csl
+
 secPrefix:
   - "Section"
   - "Sections"
