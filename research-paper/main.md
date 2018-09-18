@@ -251,7 +251,7 @@ and let us connect Google Analytics to gain further insights.
 # Evaluation: Questionnaire and variable measurement
 As part of evaluating the gamification methodology students were asked to answer two questions about their experience with the game. First, we asked to which extent they enjoyed the game, which became our independent variable "Enjoy". Students answered on a Likert scale from 1 ("Not at all") to 5 ("Loved it"). Second, students reported on a Likert scale from 1 ("I didn't bother") to 5 ("I tried to get as many as possible") to which degree the game competition motivated them to get more cards, which became our independent variable "Motivation".
 
-Our dependent variable "Grade" was computed from 2 to 5, 2 being suspended, 3 being pass, 4 being pass with distinction, and 5 being pass with excellence. The boxes "Enjoy", "Grade" and "Motivation" (Figure \ref{fig:matrix}) show the distribution and frequency of responses for our 3 variables.
+Our dependent variable "Grade" was computed from 2 to 5, 2 being suspended, 3 being pass, 4 being pass with distinction, and 5 being pass with excellence. The boxes "Enjoy", "Grade" and "Motivation" ([@fig:matrix]) show the distribution and frequency of responses for our 3 variables.
 
 Questionnaire responses were anonymous within teams, meaning that we could not identify individual responses or names within teams, except for 3 individuals who got different grades than their team members and were personally asked whether they wanted to share their answer for data matching purposes.
 
