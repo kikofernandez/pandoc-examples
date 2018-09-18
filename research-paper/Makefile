@@ -7,7 +7,7 @@ all: paper
 # You can still use pandoc-crossref to easily reference figures with [@fig:label]
 
 paper:
-	@pandoc -s -F pandoc-crossref --natbib meta.yaml --data-dir=data-dir --template=mytemplate.tex -N \
+	@pandoc -s -F pandoc-crossref --natbib meta.yaml --template=mytemplate.tex -N \
 	 -f markdown -t latex+raw_tex+tex_math_dollars+citations -o main.tex main.md
 	@pdflatex main.tex &> /dev/null
 	@bibtex main &> /dev/null

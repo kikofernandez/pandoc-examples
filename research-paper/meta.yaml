@@ -2,7 +2,6 @@
 template: 'mytemplate.tex'
 documentclass: acmart
 classoption: sigconf
-reference-section-title: References
 title: The impact of opt-in gamification on `\\`{=latex} students' grades in a software design course
 author:
 - name: Kiko Fernandez-Reyes
@@ -14,7 +13,6 @@ author:
 - name: Janina Hornbach
   affiliation: Uppsala University
   email: janina.hornbach@fek.uu.se
-link-citations: true
 bibliography: biblio.bib
 abstract: |
   An achievement-driven methodology strives to give students more control of their learning with enough flexibility to engage them in deeper learning.
