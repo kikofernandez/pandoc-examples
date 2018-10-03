@@ -21,3 +21,4 @@ executable filters
                      , pandoc >= 2.2.1
                      , pandoc-types >= 1.17.5.1
                      , text >= 1.2.3.1
+                     , containers >= 0.5.11.0
