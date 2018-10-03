@@ -4,27 +4,26 @@ import Text.Pandoc.JSON
 import System.IO.Error (catchIOError)
 import System.Environment (getEnv)
 import Text.Pandoc
---import qualified Data.Text.IO as T
 import Text.Pandoc.Walk (walk)
 import qualified Data.Text.IO as T
 import Data.Text (Text, pack)
 -- import Debug.Trace
 
 
--- writeMd :: PandocMonad m => Pandoc -> m Text
--- writeMd t = writeMarkdown def t
+writeMd :: Pandoc -> PandocIO Text
+writeMd p = writeMarkdown def p
 
--- -- --  forall ( m :: * -> *) =>
--- readMd :: PandocMonad m => Text -> m Pandoc
--- readMd t = undefined -- readMarkdown def t
+-- --  forall ( m :: * -> *) =>
+readMd :: Text -> PandocIO Pandoc
+readMd t = readMarkdown def t
 
--- mdToMD :: Text -> IO ()
--- mdToMD text =
---   do
---     md <- readMd text -- m Pandoc
---     -- newMd <- walk reinterpretation md
---     result <- writeMd md
---     T.putStrLn result
+mdToMD :: Text -> IO ()
+mdToMD text =
+  do
+    md <- runIOorExplode $ readMd text
+    -- newMd <- walk reinterpretation md
+    result <- runIOorExplode $ writeMd md
+    T.putStrLn result
 
 removeFenceNotes :: Block -> Block
 removeFenceNotes cb@(CodeBlock (id, classes, namevals) contents) =
@@ -33,18 +32,17 @@ removeFenceNotes cb@(CodeBlock (id, classes, namevals) contents) =
        Nothing    -> cb
 removeFenceNotes x = x
 
-reinterpretation :: Block -> Block
-reinterpretation cb@(CodeBlock (_, _, namevals) text) =
-  case lookup "note" namevals of
-    Just _ -> Para [Str text]
-    Nothing -> cb
-reinterpretation x = x
 
--- T.getContents >>= mdToMD
-main :: IO ()
+-- reinterpretation :: Block -> IO Block
+-- reinterpretation cb@(CodeBlock (_, _, namevals) text) =
+--   case lookup "note" namevals of
+--     Just _ -> return $ Para [Str text]
+--     Nothing -> return cb
+-- reinterpretation x = return x
+
 main = do
   v <- catchIOError (getEnv "FILTERING_MODE") (\_ -> return "")
   case v of
-    "WITH_COMMENTS" -> toJSONFilter reinterpretation
-    "NO_COMMENTS"  -> toJSONFilter removeFenceNotes -- disable comments
-    _ -> return ()
+    "WITH_COMMENTS" -> T.getContents >>= mdToMD
+    -- "NO_COMMENTS"  -> return $ toJSONFilter removeFenceNotes -- disable comments
+    -- _ -> return $ return ()
