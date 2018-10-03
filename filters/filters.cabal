@@ -20,3 +20,4 @@ executable filters
   build-depends:       base >= 4.7 && < 5
                      , pandoc >= 2.2.1
                      , pandoc-types >= 1.17.5.1
+                     , text >= 1.2.3.1
