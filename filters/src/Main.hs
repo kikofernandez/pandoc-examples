@@ -6,36 +6,43 @@ import System.Environment (getEnv)
 import Text.Pandoc
 import Data.Text (Text, pack)
 import Text.Pandoc.Walk (walk)
+import Control.Monad
 
 writeMd :: Pandoc -> PandocIO Text
-writeMd p = writeMarkdown def p
+writeMd = writeMarkdown def
+
 
 readMd :: Text -> PandocIO Pandoc
-readMd t = readMarkdown def t
+readMd = readMarkdown def
+
 
 removeFenceNotes :: Block -> Block
 removeFenceNotes cb@(CodeBlock (_, _, namevals) _) =
   case lookup "note" namevals of
        Just _     -> Div ("", [], []) []
        Nothing    -> cb
-removeFenceNotes x = walk printing x
+removeFenceNotes x = x
 
 
-printing :: Inline -> Inline
-printing s@(Str t)
+-- TODO: assumes that there will be a single citation
+stringToCitation :: Inline -> Inline
+stringToCitation s@(Str t)
   | head t == '@' = Cite [Citation (tail t) [] [] AuthorInText 0 0] [s]
-printing x = x
+stringToCitation x = x
+
 
 reinterpretation :: Block -> IO [Block]
 reinterpretation cb@(CodeBlock (_, _, namevals) text) =
   case lookup "note" namevals of
     Just _ -> do
-      p <- runIOorExplode $ readMd (pack text) >>= writeMd >>= readMd
-      case walk printing p of
+      p <- runIOorExplode $ (readMd >=> writeMd >=> readMd) (pack text)
+      case walk stringToCitation p of
         Pandoc _ b -> return b
     Nothing -> return [cb]
 reinterpretation x = return [x]
 
+
+main :: IO ()
 main = do
   v <- catchIOError (getEnv "FILTERING_MODE") (\_ -> return "")
   case v of
