@@ -1,7 +1,7 @@
 # pandoc by examples
 
 This repository contains examples of Pandoc usage.
-All the documents are written in Markdown and compiled to PDF, DOCX and ODT.
+All the documents are written in Markdown and compiled to other formats.
 
 - The folder `agreement` contains an example of how an agreement document could
   have been written in Markdown. Uses `pandoc` to generate a PDF, DOCX and ODT versions.
