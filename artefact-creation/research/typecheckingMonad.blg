@@ -1,0 +1,144 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: typecheckingMonad.aux
+The style file: ACM-Reference-Format.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: biblio.bib
+Warning--string name "oracle" is undefined
+--line 415 of file biblio.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--no key, author in GHC
+Warning--no author, editor, organization, or key in GHC
+Warning--to sort, need author or key in GHC
+Warning--no key, author in OCaml
+Warning--no author, editor, organization, or key in OCaml
+Warning--to sort, need author or key in OCaml
+Warning--no key, author in FSharp
+Warning--no author, editor, organization, or key in FSharp
+Warning--to sort, need author or key in FSharp
+Warning--no key, author in javac
+Warning--no author, editor, organization, or key in javac
+Warning--to sort, need author or key in javac
+Warning--no key, author in scalac
+Warning--no author, editor, organization, or key in scalac
+Warning--to sort, need author or key in scalac
+Warning--no key, author in clang
+Warning--no author, editor, organization, or key in clang
+Warning--to sort, need author or key in clang
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Warning--no key, author in clang
+Warning--no key, author in clang
+Warning--no key, author in FSharp
+Warning--no key, author in FSharp
+Warning--no key, author in GHC
+Warning--no key, author in GHC
+Warning--no key, author in javac
+Warning--no key, author in javac
+Warning--no key, author in OCaml
+Warning--no key, author in OCaml
+Warning--no key, author in scalac
+Warning--no key, author in scalac
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--no key, author in FSharp
+Warning--no author, editor, organization, or key in FSharp
+Warning--empty author in FSharp
+Warning--no key, author in GHC
+Warning--no author, editor, organization, or key in GHC
+Warning--empty author in GHC
+Warning--no key, author in javac
+Warning--no author, editor, organization, or key in javac
+Warning--empty author in javac
+Warning--no key, author in clang
+Warning--no author, editor, organization, or key in clang
+Warning--empty author in clang
+Warning--no key, author in OCaml
+Warning--no author, editor, organization, or key in OCaml
+Warning--empty author in OCaml
+Warning--no key, author in scalac
+Warning--no author, editor, organization, or key in scalac
+Warning--empty author in scalac
+Warning--empty address in typestate
+Warning--empty address in JavaGenerics
+Warning--empty publisher in DBLP:conf/sfm/BrandauerCCFJPT15
+Warning--empty address in DBLP:conf/sfm/BrandauerCCFJPT15
+Warning--page numbers missing in both pages and numpages fields in DBLP:conf/sfm/BrandauerCCFJPT15
+Warning--empty address in SystemFSubtyping
+Warning--empty publisher in Kappa
+Warning--empty address in Kappa
+Warning--page numbers missing in both pages and numpages fields in Kappa
+Warning--empty address in DBLP:conf/agere/ClebschDBM15
+Warning--empty address in exprProblem1
+Warning--empty address in Elm
+Warning--empty address in Extensibility
+Warning--no number and no volume in ernst2004expression
+Warning--page numbers missing in both pages and numpages fields in phantom-types
+Warning--page numbers missing in both pages and numpages fields in typestateFoundation
+Warning--empty publisher in reader-writer-monad
+Warning--empty address in reader-writer-monad
+Warning--page numbers missing in both pages and numpages fields in reader-writer-monad
+Warning--empty publisher in monad-transformers
+Warning--empty address in monad-transformers
+Warning--page numbers missing in both pages and numpages fields in monad-transformers
+Warning--no number and no volume in HaskellReport
+Warning--page numbers missing in both pages and numpages fields in HaskellReport
+Warning--empty publisher in ApplicativeDo
+Warning--empty address in ApplicativeDo
+Warning--page numbers missing in both pages and numpages fields in ApplicativeDo
+Warning--empty publisher in gadts-inference
+Warning--empty address in gadts-inference
+Warning--page numbers missing in both pages and numpages fields in gadts-inference
+Warning--empty address in TAPL
+Warning--page numbers missing in both pages and numpages fields in bidirectional
+Warning--empty author in Rust
+Warning--empty year in Rust
+Warning--empty address in traits
+Warning--empty address in ExpressionRevisited
+Warning--empty publisher in exception-monad
+Warning--empty address in exception-monad
+Warning--page numbers missing in both pages and numpages fields in exception-monad
+Warning--empty address in TypeClasses
+You've used 37 entries,
+            5727 wiz_defined-function locations,
+            1614 strings with 23772 characters,
+and the built_in function-call counts, 38312 in all, are:
+= -- 4558
+> -- 1133
+< -- 0
++ -- 382
+- -- 403
+* -- 2637
+:= -- 3689
+add.period$ -- 177
+call.type$ -- 37
+change.case$ -- 215
+chr.to.int$ -- 36
+cite$ -- 149
+duplicate$ -- 3637
+empty$ -- 2568
+format.name$ -- 470
+if$ -- 9089
+int.to.chr$ -- 3
+int.to.str$ -- 1
+missing$ -- 119
+newline$ -- 410
+num.names$ -- 255
+pop$ -- 1428
+preamble$ -- 1
+purify$ -- 540
+quote$ -- 0
+skip$ -- 1267
+stack$ -- 0
+substring$ -- 2750
+swap$ -- 308
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 966
+warning$ -- 88
+while$ -- 247
+width$ -- 0
+write$ -- 749
+(There were 89 warnings)

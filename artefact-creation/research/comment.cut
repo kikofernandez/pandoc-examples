@@ -1,0 +1,9 @@
+  Kiko Fernandez-Reyes' work on this paper was funded by the SCADA
+  project. Elias Castegren's work on this paper was funded by KTH
+  Royal Institute of Technology. We are grateful to Viktor
+  Palmkvist for pointing out the usage of \ec{ApplicativeDo} to
+  support multiple errors, and to the anonymous reviewer who
+  suggested an improvement to the type state implementation. We
+  are also grateful to Stephan Brandauer, Tobias Wrigstad, Dave
+  Clarke, and Albert Mingkun Yang who influenced the design of the
+  Encore compiler.

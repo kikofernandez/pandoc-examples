@@ -1,0 +1,550 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{37}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{??}{FSh}{2019}]%
+        {FSharp}
+ \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{The F\# Compiler}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/fsharp/fsharp}}.
+\newblock
+\newblock
+\shownote{GitHub repository.}
+
+
+\bibitem[\protect\citeauthoryear{??}{GHC}{2019}]%
+        {GHC}
+ \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{The Glasgow Haskell Compiler}.
+\newblock \bibinfo{howpublished}{\url{https://www.haskell.org/ghc}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{??}{jav}{2019}]%
+        {javac}
+ \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{The Java Compiler}.
+\newblock
+  \bibinfo{howpublished}{\url{https://openjdk.java.net/groups/compiler/}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{??}{cla}{2019}]%
+        {clang}
+ \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{Mirror of official clang repository}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/llvm-mirror/clang}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{??}{OCa}{2019}]%
+        {OCaml}
+ \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{The OCaml Compiler}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/ocaml/ocaml}}.
+\newblock
+\newblock
+\shownote{GitHub repository.}
+
+
+\bibitem[\protect\citeauthoryear{??}{sca}{2019}]%
+        {scalac}
+ \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{The Scala Compiler}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/scala/scala}}.
+\newblock
+\newblock
+\shownote{GitHub repository.}
+
+
+\bibitem[\protect\citeauthoryear{Aldrich, Sunshine, Saini, and Sparks}{Aldrich
+  et~al\mbox{.}}{2009}]%
+        {typestate}
+\bibfield{author}{\bibinfo{person}{Jonathan Aldrich}, \bibinfo{person}{Joshua
+  Sunshine}, \bibinfo{person}{Darpan Saini}, {and} \bibinfo{person}{Zachary
+  Sparks}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{Typestate-oriented programming}. In
+  \bibinfo{booktitle}{\emph{Companion to the 24th Annual {ACM} {SIGPLAN}
+  Conference on Object-Oriented Programming, Systems, Languages, and
+  Applications, {OOPSLA} 2009, October 25-29, 2009, Orlando, Florida, {USA}}},
+  \bibfield{editor}{\bibinfo{person}{Shail Arora} {and}
+  \bibinfo{person}{Gary~T. Leavens}} (Eds.). \bibinfo{publisher}{{ACM}},
+  \bibinfo{pages}{1015--1022}.
+\newblock
+\showISBNx{978-1-60558-768-4}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/1639950.1640073}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Baker}{Baker}{1995}]%
+        {destructive}
+\bibfield{author}{\bibinfo{person}{Henry~G. Baker}.}
+  \bibinfo{year}{1995}\natexlab{}.
+\newblock \showarticletitle{``Use-once'' Variables and Linear Objects: Storage
+  Management, Reflection and Multi-threading}.
+\newblock \bibinfo{journal}{\emph{SIGPLAN Not.}} \bibinfo{volume}{30},
+  \bibinfo{number}{1} (\bibinfo{date}{Jan.} \bibinfo{year}{1995}),
+  \bibinfo{pages}{45--52}.
+\newblock
+\showISSN{0362-1340}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/199818.199860}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Bracha, Odersky, Stoutamire, and
+  Wadler}{Bracha et~al\mbox{.}}{1998}]%
+        {JavaGenerics}
+\bibfield{author}{\bibinfo{person}{Gilad Bracha}, \bibinfo{person}{Martin
+  Odersky}, \bibinfo{person}{David Stoutamire}, {and} \bibinfo{person}{Philip
+  Wadler}.} \bibinfo{year}{1998}\natexlab{}.
+\newblock \showarticletitle{Making the Future Safe for the Past: Adding
+  Genericity to the Java Programming Language}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 1998 {ACM} {SIGPLAN} Conference
+  on Object-Oriented Programming Systems, Languages {\&} Applications {(OOPSLA}
+  '98), Vancouver, British Columbia, Canada, October 18-22, 1998.}},
+  \bibfield{editor}{\bibinfo{person}{Bj{\o}rn~N. Freeman{-}Benson} {and}
+  \bibinfo{person}{Craig Chambers}} (Eds.). \bibinfo{publisher}{{ACM}},
+  \bibinfo{pages}{183--200}.
+\newblock
+\showISBNx{1-58113-005-8}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/286936.286957}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Brandauer et~al\mbox{.}}{Brandauer
+  et~al\mbox{.}}{2015}]%
+        {DBLP:conf/sfm/BrandauerCCFJPT15}
+\bibfield{author}{\bibinfo{person}{Stephan Brandauer} {et~al\mbox{.}}}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Parallel Objects for Multicores: {A} Glimpse at the
+  Parallel Language Encore}. In \bibinfo{booktitle}{\emph{Formal Methods for
+  Multicore Programming - {SFM} 2015}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-319-18941-3\_1}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Cardelli, Martini, Mitchell, and
+  Scedrov}{Cardelli et~al\mbox{.}}{1991}]%
+        {SystemFSubtyping}
+\bibfield{author}{\bibinfo{person}{Luca Cardelli}, \bibinfo{person}{Simone
+  Martini}, \bibinfo{person}{John~C. Mitchell}, {and} \bibinfo{person}{Andre
+  Scedrov}.} \bibinfo{year}{1991}\natexlab{}.
+\newblock \showarticletitle{An Extension of System {F} with Subtyping}. In
+  \bibinfo{booktitle}{\emph{Theoretical Aspects of Computer Software,
+  International Conference {TACS} '91, Sendai, Japan, September 24-27, 1991,
+  Proceedings}} \emph{(\bibinfo{series}{Lecture Notes in Computer Science})},
+  \bibfield{editor}{\bibinfo{person}{Takayasu Ito} {and}
+  \bibinfo{person}{Albert~R. Meyer}} (Eds.), Vol.~\bibinfo{volume}{526}.
+  \bibinfo{publisher}{Springer}, \bibinfo{pages}{750--770}.
+\newblock
+\showISBNx{3-540-54415-1}
+\urldef\tempurl%
+\url{https://doi.org/10.1007/3-540-54415-1\_73}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Castegren and Wrigstad}{Castegren and
+  Wrigstad}{2016}]%
+        {Kappa}
+\bibfield{author}{\bibinfo{person}{Elias Castegren} {and}
+  \bibinfo{person}{Tobias Wrigstad}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Reference Capabilities for Concurrency Control}. In
+  \bibinfo{booktitle}{\emph{30th European Conference on Object-Oriented
+  Programming, {ECOOP} 2016}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.4230/LIPIcs.ECOOP.2016.5}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Clebsch, Drossopoulou, Blessing, and
+  McNeil}{Clebsch et~al\mbox{.}}{2015}]%
+        {DBLP:conf/agere/ClebschDBM15}
+\bibfield{author}{\bibinfo{person}{Sylvan Clebsch}, \bibinfo{person}{Sophia
+  Drossopoulou}, \bibinfo{person}{Sebastian Blessing}, {and}
+  \bibinfo{person}{Andy McNeil}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Deny capabilities for safe, fast actors}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 5th International Workshop on
+  Programming Based on Actors, Agents, and Decentralized Control, AGERE! 2015,
+  Pittsburgh, PA, USA, October 26, 2015}},
+  \bibfield{editor}{\bibinfo{person}{Elisa~Gonzalez Boix},
+  \bibinfo{person}{Philipp Haller}, \bibinfo{person}{Alessandro Ricci}, {and}
+  \bibinfo{person}{Carlos Varela}} (Eds.). \bibinfo{publisher}{{ACM}},
+  \bibinfo{pages}{1--12}.
+\newblock
+\showISBNx{978-1-4503-3901-8}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2824815.2824816}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Cook}{Cook}{1990}]%
+        {exprProblem1}
+\bibfield{author}{\bibinfo{person}{William~R. Cook}.}
+  \bibinfo{year}{1990}\natexlab{}.
+\newblock \showarticletitle{Object-Oriented Programming Versus Abstract Data
+  Types}. In \bibinfo{booktitle}{\emph{Foundations of Object-Oriented
+  Languages, {REX} School/Workshop, Proceedings}}
+  \emph{(\bibinfo{series}{Lecture Notes in Computer Science})},
+  \bibfield{editor}{\bibinfo{person}{J.~W. de~Bakker},
+  \bibinfo{person}{Willem~P. de~Roever}, {and} \bibinfo{person}{Grzegorz
+  Rozenberg}} (Eds.), Vol.~\bibinfo{volume}{489}.
+  \bibinfo{publisher}{Springer}, \bibinfo{pages}{151--178}.
+\newblock
+\showISBNx{3-540-53931-X}
+\urldef\tempurl%
+\url{https://doi.org/10.1007/BFb0019443}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Czaplicki and Chong}{Czaplicki and
+  Chong}{2013}]%
+        {Elm}
+\bibfield{author}{\bibinfo{person}{Evan Czaplicki} {and}
+  \bibinfo{person}{Stephen Chong}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Asynchronous functional reactive programming for
+  GUIs}. In \bibinfo{booktitle}{\emph{{ACM} {SIGPLAN} Conference on Programming
+  Language Design and Implementation, {PLDI} '13, Seattle, WA, USA, June 16-19,
+  2013}}, \bibfield{editor}{\bibinfo{person}{Hans{-}Juergen Boehm} {and}
+  \bibinfo{person}{Cormac Flanagan}} (Eds.). \bibinfo{publisher}{{ACM}},
+  \bibinfo{pages}{411--422}.
+\newblock
+\showISBNx{978-1-4503-2014-6}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2491956.2462161}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{d.~S.~Oliveira and Cook}{d.~S.~Oliveira and
+  Cook}{2012}]%
+        {Extensibility}
+\bibfield{author}{\bibinfo{person}{Bruno~C. d. S.~Oliveira} {and}
+  \bibinfo{person}{William~R. Cook}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Extensibility for the Masses - Practical
+  Extensibility with Object Algebras}. In \bibinfo{booktitle}{\emph{{ECOOP}
+  2012 - Object-Oriented Programming - 26th European Conference, Beijing,
+  China, June 11-16, 2012. Proceedings}} \emph{(\bibinfo{series}{Lecture Notes
+  in Computer Science})}, \bibfield{editor}{\bibinfo{person}{James Noble}}
+  (Ed.), Vol.~\bibinfo{volume}{7313}. \bibinfo{publisher}{Springer},
+  \bibinfo{pages}{2--27}.
+\newblock
+\showISBNx{978-3-642-31056-0}
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-642-31057-7\_2}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Ernst}{Ernst}{2004}]%
+        {ernst2004expression}
+\bibfield{author}{\bibinfo{person}{Erik Ernst}.}
+  \bibinfo{year}{2004}\natexlab{}.
+\newblock \showarticletitle{The expression problem, Scandinavian style}.
+\newblock \bibinfo{journal}{\emph{ON MECHANISMS FOR SPECIALIZATION}}
+  (\bibinfo{year}{2004}), \bibinfo{pages}{27}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Fluet and Pucella}{Fluet and Pucella}{2006}]%
+        {phantom-types}
+\bibfield{author}{\bibinfo{person}{Matthew Fluet} {and}
+  \bibinfo{person}{Riccardo Pucella}.} \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Phantom types and subtyping}.
+\newblock \bibinfo{journal}{\emph{J. Funct. Program.}} \bibinfo{volume}{16},
+  \bibinfo{number}{6} (\bibinfo{year}{2006}).
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1017/S0956796806006046}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Freeman}{Freeman}{2017}]%
+        {PurescriptBook}
+\bibfield{author}{\bibinfo{person}{Phil Freeman}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{title}{PureScript by Example}.
+\newblock
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Garcia, Tanter, Wolff, and Aldrich}{Garcia
+  et~al\mbox{.}}{2014}]%
+        {typestateFoundation}
+\bibfield{author}{\bibinfo{person}{Ronald Garcia}, \bibinfo{person}{{\'{E}}ric
+  Tanter}, \bibinfo{person}{Roger Wolff}, {and} \bibinfo{person}{Jonathan
+  Aldrich}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Foundations of Typestate-Oriented Programming}.
+\newblock \bibinfo{journal}{\emph{{ACM} Trans. Program. Lang. Syst.}}
+  \bibinfo{volume}{36}, \bibinfo{number}{4} (\bibinfo{year}{2014}).
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2629609}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Jones}{Jones}{1995}]%
+        {reader-writer-monad}
+\bibfield{author}{\bibinfo{person}{Mark~P. Jones}.}
+  \bibinfo{year}{1995}\natexlab{}.
+\newblock \showarticletitle{Functional Programming with Overloading and
+  Higher-Order Polymorphism}. In \bibinfo{booktitle}{\emph{Advanced Functional
+  Programming, First International Spring School on Advanced Functional
+  Programming Techniques, Tutorial Text}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/3-540-59451-5\_4}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Liang, Hudak, and Jones}{Liang
+  et~al\mbox{.}}{1995}]%
+        {monad-transformers}
+\bibfield{author}{\bibinfo{person}{Sheng Liang}, \bibinfo{person}{Paul Hudak},
+  {and} \bibinfo{person}{Mark~P. Jones}.} \bibinfo{year}{1995}\natexlab{}.
+\newblock \showarticletitle{Monad Transformers and Modular Interpreters}. In
+  \bibinfo{booktitle}{\emph{22nd {ACM} {SIGPLAN-SIGACT} Symposium on Principles
+  of Programming Languages {POPL} 1995}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/199448.199528}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Marlow et~al\mbox{.}}{Marlow
+  et~al\mbox{.}}{2010}]%
+        {HaskellReport}
+\bibfield{author}{\bibinfo{person}{Simon Marlow} {et~al\mbox{.}}}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Haskell 2010 language report}.
+\newblock \bibinfo{journal}{\emph{Available online http://www. haskell.
+  org/(August 2019)}} (\bibinfo{year}{2010}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Marlow, Peyton~Jones, Kmett, and
+  Mokhov}{Marlow et~al\mbox{.}}{2016}]%
+        {ApplicativeDo}
+\bibfield{author}{\bibinfo{person}{Simon Marlow}, \bibinfo{person}{Simon
+  Peyton~Jones}, \bibinfo{person}{Edward Kmett}, {and} \bibinfo{person}{Andrey
+  Mokhov}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Desugaring Haskell's Do-notation into Applicative
+  Operations}. In \bibinfo{booktitle}{\emph{Proceedings of the 9th
+  International Symposium on Haskell}} \emph{(\bibinfo{series}{Haskell 2016})}.
+\newblock
+\showISBNx{978-1-4503-4434-0}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2976002.2976007}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{{Peyton Jones}, Vytiniotis, Weirich, and
+  Washburn}{{Peyton Jones} et~al\mbox{.}}{2006}]%
+        {gadts-inference}
+\bibfield{author}{\bibinfo{person}{Simon~L. {Peyton Jones}},
+  \bibinfo{person}{Dimitrios Vytiniotis}, \bibinfo{person}{Stephanie Weirich},
+  {and} \bibinfo{person}{Geoffrey Washburn}.} \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Simple unification-based type inference for GADTs}.
+  In \bibinfo{booktitle}{\emph{11th {ACM} {SIGPLAN} International Conference on
+  Functional Programming, {ICFP} 2006}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/1159803.1159811}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Pierce}{Pierce}{2002}]%
+        {TAPL}
+\bibfield{author}{\bibinfo{person}{Benjamin~C. Pierce}.}
+  \bibinfo{year}{2002}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Types and programming languages}}.
+\newblock \bibinfo{publisher}{{MIT} Press}.
+\newblock
+\showISBNx{978-0-262-16209-8}
+
+
+\bibitem[\protect\citeauthoryear{Pierce and Turner}{Pierce and Turner}{2000a}]%
+        {bidirectional}
+\bibfield{author}{\bibinfo{person}{Benjamin~C Pierce} {and}
+  \bibinfo{person}{David~N Turner}.} \bibinfo{year}{2000}\natexlab{a}.
+\newblock \showarticletitle{{Local Type Inference}}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Programming Languages and
+  Systems (TOPLAS)}} \bibinfo{volume}{22}, \bibinfo{number}{1}
+  (\bibinfo{year}{2000}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Pierce and Turner}{Pierce and Turner}{2000b}]%
+        {bidirectionaltypechecking}
+\bibfield{author}{\bibinfo{person}{Benjamin~C. Pierce} {and}
+  \bibinfo{person}{David~N. Turner}.} \bibinfo{year}{2000}\natexlab{b}.
+\newblock \showarticletitle{Local type inference}.
+\newblock \bibinfo{journal}{\emph{{ACM} Trans. Program. Lang. Syst.}}
+  \bibinfo{volume}{22}, \bibinfo{number}{1} (\bibinfo{year}{2000}),
+  \bibinfo{pages}{1--44}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/345099.345100}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Reynolds}{Reynolds}{1994}]%
+        {exprProblem2}
+\bibfield{author}{\bibinfo{person}{JC Reynolds}.}
+  \bibinfo{year}{1994}\natexlab{}.
+\newblock \bibinfo{title}{User-defined types and procedural data as
+  complementary approaches to data abstraction. Theoretical Aspects of
+  Object-Oriented Programming}.
+\newblock
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Rust Programming Language}{Rust Programming
+  Language}{[n.d.]}]%
+        {Rust}
+Rust Programming Language \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{The Rust Programming Language}.
+\newblock \bibinfo{howpublished}{\url{https://www.rust-lang.org}}.
+\newblock
+\newblock
+\shownote{Accessed June 2019.}
+
+
+\bibitem[\protect\citeauthoryear{Sch\"{a}rli, Ducasse, Nierstrasz, and
+  Black}{Sch\"{a}rli et~al\mbox{.}}{2003}]%
+        {traits}
+\bibfield{author}{\bibinfo{person}{Nathanael Sch\"{a}rli},
+  \bibinfo{person}{St\'{e}phane Ducasse}, \bibinfo{person}{Oscar Nierstrasz},
+  {and} \bibinfo{person}{Andrew~P. Black}.} \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{Traits: Composable Units of Behaviour}.
+\newblock In \bibinfo{booktitle}{\emph{ECOOP 2003}}.
+  \bibinfo{publisher}{Springer Berlin Heidelberg}.
+\newblock
+\showISBNx{978-3-540-40531-3}
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-540-45070-2_12}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Swierstra}{Swierstra}{2008}]%
+        {DataTypesCarte}
+\bibfield{author}{\bibinfo{person}{Wouter Swierstra}.}
+  \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Data types {\`{a}} la carte}.
+\newblock \bibinfo{journal}{\emph{J. Funct. Program.}} \bibinfo{volume}{18},
+  \bibinfo{number}{4} (\bibinfo{year}{2008}), \bibinfo{pages}{423--436}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1017/S0956796808006758}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Torgersen}{Torgersen}{2004}]%
+        {ExpressionRevisited}
+\bibfield{author}{\bibinfo{person}{Mads Torgersen}.}
+  \bibinfo{year}{2004}\natexlab{}.
+\newblock \showarticletitle{The Expression Problem Revisited}. In
+  \bibinfo{booktitle}{\emph{{ECOOP} 2004 - Object-Oriented Programming, 18th
+  European Conference}} \emph{(\bibinfo{series}{Lecture Notes in Computer
+  Science})}, \bibfield{editor}{\bibinfo{person}{Martin Odersky}} (Ed.),
+  Vol.~\bibinfo{volume}{3086}. \bibinfo{publisher}{Springer},
+  \bibinfo{pages}{123--143}.
+\newblock
+\showISBNx{3-540-22159-X}
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-540-24851-4\_6}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Vytiniotis, {Peyton Jones}, Schrijvers, and
+  Sulzmann}{Vytiniotis et~al\mbox{.}}{2011}]%
+        {haskellInference}
+\bibfield{author}{\bibinfo{person}{Dimitrios Vytiniotis},
+  \bibinfo{person}{Simon~L. {Peyton Jones}}, \bibinfo{person}{Tom Schrijvers},
+  {and} \bibinfo{person}{Martin Sulzmann}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{OutsideIn(X) Modular type inference with local
+  assumptions}.
+\newblock \bibinfo{journal}{\emph{J. Funct. Program.}} \bibinfo{volume}{21},
+  \bibinfo{number}{4-5} (\bibinfo{year}{2011}), \bibinfo{pages}{333--412}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1017/S0956796811000098}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wadler}{Wadler}{1992}]%
+        {exception-monad}
+\bibfield{author}{\bibinfo{person}{Philip Wadler}.}
+  \bibinfo{year}{1992}\natexlab{}.
+\newblock \showarticletitle{Monads for functional programming}. In
+  \bibinfo{booktitle}{\emph{Program Design Calculi, Proceedings of the {NATO}
+  Advanced Study Institute on Program Design Calculi}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-662-02880-3\_8}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wadler}{Wadler}{1998}]%
+        {exprProblem3}
+\bibfield{author}{\bibinfo{person}{Philip Wadler}.}
+  \bibinfo{year}{1998}\natexlab{}.
+\newblock \bibinfo{title}{The expression problem}.
+\newblock \bibinfo{howpublished}{Posted on the Java Genericity mailing list}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Wadler and Blott}{Wadler and Blott}{1989}]%
+        {TypeClasses}
+\bibfield{author}{\bibinfo{person}{Philip Wadler} {and}
+  \bibinfo{person}{Stephen Blott}.} \bibinfo{year}{1989}\natexlab{}.
+\newblock \showarticletitle{How to Make ad-hoc Polymorphism Less ad-hoc}. In
+  \bibinfo{booktitle}{\emph{Conference Record of the Sixteenth Annual {ACM}
+  Symposium on Principles of Programming Languages, Austin, Texas, USA, January
+  11-13, 1989}}. \bibinfo{publisher}{{ACM} Press}, \bibinfo{pages}{60--76}.
+\newblock
+\showISBNx{0-89791-294-2}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/75277.75283}
+\showDOI{\tempurl}
+
+
+\end{thebibliography}

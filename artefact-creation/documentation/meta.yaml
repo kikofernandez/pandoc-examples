@@ -1,0 +1,27 @@
+---
+title: |
+  Developing a Monadic Type Checker \
+  for an Object-Oriented Language
+author:
+- Elias Castegren
+- Kiko Fernandez-Reyes
+header-includes:
+- |
+  ```{=html}
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Gentium+Basic|Inconsolata" rel="stylesheet">
+  ```
+- \lstset{breaklines=true}
+- \lstset{language=[Motorola68k]Assembler}
+- \lstset{basicstyle=\small\ttfamily}
+- \lstset{extendedchars=true}
+- \lstset{tabsize=2}
+- \lstset{columns=fixed}
+- \lstset{showstringspaces=false}
+- \lstset{frame=trbl}
+- \lstset{frameround=tttt}
+- \lstset{framesep=4pt}
+- \lstset{numbers=left}
+- \lstset{numberstyle=\tiny\ttfamily}
+- \lstset{postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}}
+---

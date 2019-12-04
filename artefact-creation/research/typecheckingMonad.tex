@@ -1,0 +1,2805 @@
+%% For double-blind review submission, w/o CCS and ACM Reference (max submission space)
+%\documentclass[sigconf,review,anonymous]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
+%% For double-blind review submission, w/ CCS and ACM Reference
+%\documentclass[acmsmall,review,anonymous]{acmart}\settopmatter{printfolios=true}
+%% For single-blind review submission, w/o CCS and ACM Reference (max submission space)
+%\documentclass[sigplan,review,anonymous]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
+\documentclass[sigplan,screen]{acmart}
+%% For single-blind review submission, w/ CCS and ACM Reference
+%\documentclass[acmsmall,review]{acmart}\settopmatter{printfolios=true}
+%% For final camera-ready submission, w/ required CCS and ACM Reference
+%\documentclass[acmsmall]{acmart}\settopmatter{}
+
+
+%%% The following is specific to SLE '19 and the paper
+%%% 'Developing a Monadic Type Checker for an Object-Oriented Language: An Experience Report'
+%%% by Elias Castegren and Kiko Fernandez-Reyes.
+%%%
+\setcopyright{acmlicensed}
+\acmPrice{15.00}
+\acmDOI{10.1145/3357766.3359545}
+\acmYear{2019}
+\copyrightyear{2019}
+\acmISBN{978-1-4503-6981-7/19/10}
+\acmConference[SLE '19]{Proceedings of the 12th ACM SIGPLAN International Conference on Software Language Engineering}{October 20--22, 2019}{Athens, Greece}
+\acmBooktitle{Proceedings of the 12th ACM SIGPLAN International Conference on Software Language Engineering (SLE '19), October 20--22, 2019, Athens, Greece}
+
+%% Bibliography style
+\bibliographystyle{ACM-Reference-Format}
+%% Citation style
+%% Note: author/year citations are required for papers published as an
+%% issue of PACMPL.
+%\citestyle{acmauthoryear}   %% For author/year citations
+
+\usepackage{listings}
+%\usepackage{xcolor}
+%\usepackage{minipage}
+
+\usepackage{booktabs}   %% For formal tables:
+                        %% http://ctan.org/pkg/booktabs
+\usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+                        %% http://ctan.org/pkg/subcaption
+
+\lstdefinestyle{encore}
+{
+  language=haskell,
+  keywordstyle=\tt\bfseries\bfseries\color{black},
+  commentstyle=\fontfamily{ptm}\selectfont\itshape\color{magenta},
+  numbers=none,  %left,
+  numberstyle=\tt\footnotesize,
+  literate={lambda}{$\lambda$}{0}{->}{$\to\ $}{2}{=>}{$\Rightarrow\ $}{2}{<-}{$\leftarrow\ $}{2},
+  basicstyle=\fontsize{7}{9}\selectfont\tt\color{black},
+  aboveskip=1ex,
+  belowskip=3ex,
+  tabsize=2,
+  columns=fullflexible,
+  xleftmargin=0ex,
+  resetmargins=true,
+  showstringspaces=false,
+  morecomment=[l]{--},
+  morecomment=[s]{/*}{*/},
+  escapeinside={(*@}{@*)},
+%  backgroundcolor=\color[rgb]{0.95,0.95,0.95},%
+morekeywords={forward,interface,require,trait,async,suspend,await,def,active,this,string,uint,int,real,bool,unit,Fut,Flow,end,in,var,val,then,fun,box,unbox,undiamond,poll,stop,match,local,new,consume}
+  % breaklines=true
+}
+
+\newcommand{\ec}[1]{\lstinline[style=encore,breaklines=true,basicstyle=\fontsize{9}{9}\tt]@#1@}
+\newcommand{\mec}[1]{\ensuremath{\mbox{\ec{#1}}}}
+\newcommand{\kw}[1]{\lstinline[style=encore,breaklines=true,basicstyle=\fontsize{9}{9}]@#1@}
+\newcommand{\RED}[1]{\textcolor{red}{#1}}
+\newcommand{\TODO}[1]{\RED{[#1]}}
+\newcommand{\ELIAS}[1]{\textcolor{orange}{[Elias: #1]}}
+\newcommand{\KIKO}[1]{\textcolor{green}{[KIKO: #1]}}
+\newcommand{\astt}[0]{\textit{AST}}
+\newcommand{\uncover}[2]{#2}
+
+% This let us keep track of things that we need to add if the paper
+% gets accepted, and that were omitted for the reviewing process.
+\newcommand{\doubleblind}[1]{#1}
+
+\synctex=1
+
+\begin{document}
+\lstset{language=Haskell}
+
+\title[Developing a Monadic Type Checker for an OO Language]{Developing a Monadic Type Checker for an\\
+Object-Oriented Language: An Experience Report}
+
+
+\author{Elias Castegren}
+\orcid{0000-0003-4918-6582}
+\affiliation{
+  \department{Software and Computer Systems}
+  \institution{KTH Royal Institute of Technology}
+  \country{Sweden}
+}
+\email{eliasca@kth.se}
+
+\author{Kiko Fernandez-Reyes}
+\orcid{0000-0001-8654-118X}
+\affiliation{
+  \department{Information Technology}
+  \institution{Uppsala University}
+  \country{Sweden}
+}
+\email{kiko.fernandez@it.uu.se}
+
+
+\begin{abstract}
+Functional programming languages are well-suited for developing
+compilers, and compilers for functional languages are often
+themselves written in a functional language. Functional
+abstractions, such as monads, allow abstracting away some of the
+repetitive structure of a compiler, removing boilerplate code
+and making extensions simpler. Even so, functional languages are
+rarely used to implement compilers for languages of other
+paradigms.
+
+This paper reports on the experience of a four-year long project
+where we developed a compiler for a concurrent, object-oriented language
+using the functional language Haskell. The focus of the paper is
+the implementation of the type checker, but the design works well
+in static analysis tools, such as tracking uniqueness of variables to ensure data-race freedom.
+The paper starts from a simple type checker to which we add more complex
+features, such as type state, with minimal changes to the overall initial design.
+\end{abstract}
+
+
+%% 2012 ACM Computing Classification System (CSS) concepts
+%% Generate at 'http://dl.acm.org/ccs/ccs.cfm'.
+ \begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10011007.10011006.10011008.10011009.10011012</concept_id>
+<concept_desc>Software and its engineering~Functional languages</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10011006.10011041</concept_id>
+<concept_desc>Software and its engineering~Compilers</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10011006.10011008.10011009.10011011</concept_id>
+<concept_desc>Software and its engineering~Object oriented languages</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10003752.10003790.10011740</concept_id>
+<concept_desc>Theory of computation~Type theory</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Software and its engineering~Functional languages}
+\ccsdesc[500]{Software and its engineering~Compilers}
+\ccsdesc[300]{Software and its engineering~Object oriented languages}
+\ccsdesc[300]{Theory of computation~Type theory}
+%% End of generated code
+
+
+\keywords{functional programming, object-oriented languages, type systems, compilers}
+
+\maketitle
+
+\section{Introduction}
+
+Compilers for functional languages are
+often written in functional languages themselves. For example,
+the Haskell, OCaml, and F\# compilers are written in
+their own respective language~\cite{GHC, OCaml, FSharp}.
+The recursive nature of functional
+programming, as well as constructs such as algebraic data types
+and pattern matching, lends itself well to traverse and manipulate
+abstract syntax trees, which is a large part of the
+task of a compiler.
+%
+Functional programming languages provide
+abstractions, such as type classes or ML style modules, which
+allows writing concise and extensible code.
+
+However, programmers are creatures of habit. Therefore, compilers for
+imperative or object-oriented languages tend to be written in
+languages of these paradigms, e.g., the Java compiler
+and the Scala compiler are written in their respective languages,
+and the \texttt{clang}
+compiler framework for C and C++ is written in C++~\cite{javac, scalac, clang}.
+%
+This habit prevents compiler writers from using attractive features from
+other languages.
+%
+For example, a programmer developing a language tool in C will
+miss out on features like pattern matching and useful type system
+features that are not available in C.\footnote{The same argument
+  could be made in the other direction, since functional languages
+  for example typically do not offer control over low-level
+  details like memory layout. }
+
+%1152 ./src/types/Types.hs
+%2391 ./src/types/Typechecker/Typechecker.hs
+%615 ./src/types/Typechecker/Environment.hs
+%1014 ./src/types/Typechecker/TypeError.hs
+%409 ./src/types/Typechecker/Capturechecker.hs
+%422 ./src/types/Typechecker/Prechecker.hs
+%953 ./src/types/Typechecker/Util.hs
+%934 ./src/ir/AST/AST.hs
+%116 ./src/ir/AST/Meta.hs
+%491 ./src/ir/AST/Util.hs
+%119 ./src/ir/Identifiers.hs
+% Total: 8616 lines
+In this paper, we report on our experience using Haskell to
+develop the compiler for
+\uncover{a concurrent, object-oriented language.}
+              {the object-oriented language Encore~\cite{DBLP:conf/sfm/BrandauerCCFJPT15}.}
+The full compiler consists of
+$\approx$15,000 lines of Haskell which compiles Encore to C.
+%
+% \RED{
+% From these $\approx$15,000 lines, $\approx$7,000 lines refer to type checking
+% and $\approx$1,600 lines to abstract syntax tree (AST) and helper functions on the
+% AST.}\footnote{\RED{The language has two AST, one for the surface syntax of the Encore language
+% and an intermediate representation language resembling C. The type checking
+% refers only to typing the Encore language, not the intermediate, as well as helper
+% typing functions.}}
+To make the presentation fit in a paper, we use a subset of the
+language and focus on the implementation of the type checker
+($\approx$7,000 lines in the full compiler).
+% \RED{, leaving out
+% details such as type inference}\footnote{\RED{The type checker of the Encore language
+% limits type inference to parametric polymorphism
+% of positional arguments in class-, method-, and function-site calls.}}.
+% TODO: Elias, should we add this?
+%(in the Appendix we show code examples from the paper
+%and the actual Encore compiler, where the main differences refer to
+%functionality that we cannot fit in under the page limit).
+We start from a simple type
+checker and gradually refactor and extend it to make it more
+robust and feature rich. The monadic structure of the code
+allows these extensions with
+few or no changes to the original code.
+%
+%We finish by explaining how the design is orthogonal to other common
+%object-oriented language features, such as parametric polymorphism or
+%the use of type annotations (\emph{capabilities})
+%to track unique (linear) variables in the
+%\uncover{language}{Encore language}.~\footnote{Tracking linearity of variables is useful for performing optimisations, or (statically) proving data-race freedom.
+%This can be done in a new compiler phase, or as a code analysis tool independent from the compiler.
+%\ELIAS{We should state what we are doing, not what could be done}}
+
+The language started as a research project, but has since
+evolved to a full language with support for parametric polymorphism, subtyping
+via traits~\cite{traits}, concurrency, and a type system that
+prevents data-races between threads sharing state~\cite{Kappa}.
+%\RED{(Section~\ref{sec: capabilities} shows how to add a linear capability to prevent data-races)}.
+This paper reports on our experience creating a compiler for
+a research language, focusing on the features and
+robustness of the type checker. The techniques
+used are not novel on their own, but we have not seen them used in
+this combination for an object-oriented language.
+%
+
+\paragraph{Audience}
+Our hope is that this paper can serve as a source of inspiration for language engineering researchers and
+compiler writers who want to use functional languages to develop compilers
+and tools for object-oriented languages. We expect the audience
+to be familiar with basic Haskell notation, the standard monads, and
+basic extensions.
+
+\paragraph{Contributions} %Our main contributions are:
+
+\begin{itemize}
+\item
+%  Encoding of the abstract syntax tree of an
+%  object-oriented language in Haskell, and
+  An explanation of the initial design and
+  implementation of a type checker for an object-oriented language, using common
+  functional programming constructs
+  (Sections~\ref{sec:oop}--\ref{sec:reader}).
+\item Descriptions of how to extend the type checker to handle
+  backtraces, reporting warnings, and throwing multiple errors
+  (Sections~\ref{sec:backtrace}--\ref{sec:multiple errors}).
+\item A description of the use of phantom types to do type-level programming,
+  which ensures that the
+  type checker indeed type checks the entire program
+  (Section~\ref{sec:phantom}).
+\item Explanation on how to add parametric polymorphism, subtyping via traits, and
+  tracking of uniqueness of variables with no changes to the
+  monadic design~(Sections~\ref{sec: generics} -- \ref{sec: capabilities}).
+\end{itemize}
+
+
+\begin{figure*}[ht]
+\begin{minipage}[t]{.46\linewidth}
+\begin{lstlisting}[style=encore, numbers=none]
+type Name = String
+newtype Program = Program [ClassDef]
+
+data ClassDef = ClassDef {cname   :: Name, fields  :: [FieldDef]
+                            ,methods :: [MethodDef]}
+
+data FieldDef = FieldDef {fname :: Name, ftype :: Type
+                            ,fmod  :: Mod}
+
+data MethodDef = MethodDef {mname :: Name, mparams :: [Param]
+                              ,mtype :: Type, mbody :: Expr}
+
+data Type = ClassType Name | IntType | BoolType
+  | Arrow {tparams :: [Type], tresult :: Type}
+  | UnitType deriving (Eq)
+  \end{lstlisting}
+\end{minipage}
+%
+\begin{minipage}[t]{.46\linewidth}
+\begin{lstlisting}[style=encore, numbers=none]
+data Expr = BoolLit {etype :: Maybe Type, bval  :: Bool}
+  | IntLit {etype :: Maybe Type, ival  :: Int}
+  | Lambda {etype :: Maybe Type, params :: [Param], body  :: Expr}
+  | VarAccess {etype :: Maybe Type, name  :: Name}
+  | FieldAccess {etype  :: Maybe Type,
+                  target :: Expr, name   :: Name}
+  | Assignment {etype :: Maybe Type, lhs   :: Expr, rhs   :: Expr}
+  | MethodCall {etype  :: Maybe Type, target :: Expr,
+                 name   :: Name, args   :: [Expr]}
+  | FunctionCall {etype :: Maybe Type,
+                   target :: Expr, args  :: [Expr]}
+  | Let {etype :: Maybe Type, name  :: Name,
+          (*@\texttt{val}@*)  :: Expr, body  :: Expr}
+  | ...
+\end{lstlisting}
+\end{minipage}
+\caption{\label{fig:ast}Encoding of \astt{} nodes using algebraic data types}
+\end{figure*}
+
+The main point of the work presented here
+is the ease of extension from the original type
+checker with new compiler functionality, and how
+easily one can add object-oriented features, such as
+subtyping via traits.
+
+
+\section{A Small Object-Oriented Language and its Typechecker}
+\label{sec:oop}
+
+\begin{figure*}[ht]
+\begin{minipage}[t]{.45\linewidth}
+\begin{lstlisting}[style=encore,numbers=left]
+instance Typecheckable Program where
+  typecheck env (Program cls) =
+    Program <$> mapM (typecheck env) cls (*@\label{code:fmap}@*)
+
+instance Typecheckable ClassDef where
+  typecheck env cdef@ClassDef{cname, fields, methods} = do (*@\label{code:pun1}@*)
+    let env' = addVariable env "this" (ClassType cname) (*@\label{code:tcThis}@*)
+    fields' <- mapM (typecheck env') fields (*@\label{code:tcFields}@*)
+    methods' <- mapM (typecheck env') methods (*@\label{code:tcMethods}@*)
+    return cdef{fields = fields', methods = methods'}
+
+instance Typecheckable FieldDef where
+  typecheck env fdef@FieldDef{ftype} = do (*@\label{code:pun2}@*)
+    ftype' <- typecheck env ftype
+    return fdef{ftype = ftype'}
+
+instance Typecheckable Type where (*@\label{code:start type}@*)
+  typecheck env (ClassType c) = do
+    _ <- lookupClass env c
+    return $ ClassType c
+  typecheck _ IntType = return IntType
+  typecheck _ UnitType = return UnitType
+  typecheck _ BoolType = return BoolType
+  typecheck env (Arrow ts t) = do
+    ts' <- mapM (typecheck env) ts
+    t' <- typecheck env t
+    return $ Arrow ts' t (*@\label{code:finish type}@*)
+\end{lstlisting}
+\end{minipage}
+%
+\begin{minipage}[t]{.45\linewidth}
+\begin{lstlisting}[style=encore,firstnumber=28,xleftmargin=6ex,numbers=left]
+instance Typecheckable Expr where
+  ...
+  typecheck env e@(FunctionCall {target, args}) = do (*@\label{code:eg:functioncallStart}@*)
+    target' <- typecheck env target
+    let targetType = getType target'
+    unless (isArrowType targetType) $ (*@\label{code:dollar}@*)
+      throwError $ NonArrowTypeError targetType (*@\label{code:throwError}@*)
+    let paramTypes = tparams targetType
+        resultType = tresult targetType
+    args' <- zipWithM hasType args paramTypes (*@\label{code:hasType1}@*)
+    return $ setType resultType e{target = target', args = args'}(*@\label{code:eg:functioncallEnd}@*)
+
+  typecheck env e@(Assignment {lhs, rhs}) = do
+    unless (isLVal lhs) $
+      throwError $ NonLValError lhs
+    lhs' <- typecheck env lhs
+    let lType = getType lhs'
+    rhs' <- hasType env rhs lType (*@\label{code:hasType2}@*)
+    checkMutability lhs'
+    return $ setType UnitType e{lhs = lhs', rhs = rhs'}
+    where
+      checkMutability e@FieldAccess{target, name} = do
+        field <- lookupField env (getType target) name
+        unless (isVarField field ||
+                 constructor env && isThisAccess target) $
+          throwError $ ImmutableFieldError e
+      checkMutability _ = return () (*@\label{code:eg:assignmentEnd}@*)
+\end{lstlisting}
+\end{minipage}
+%
+\caption{Type checking functions for programs, classes, fields, types and expressions (excerpt)}
+\label{fig:typecheckable}
+\end{figure*}
+
+% Definition of the OO language
+We define our object-oriented language below,
+and the encoding of the abstract syntax tree (\astt{}) using
+algebraic data types in Figure~\ref{fig:ast}.
+%
+% \begin{figure}[ht]
+ \begin{align*}
+ \textit{Classes} & &
+   L & ::= \mec{class}\  C \{ \overline{Q\ f : \tau}; \ \overline{M} \} & &\\
+ \textit{Qualifiers} & &
+   Q &::= \mec{var} \mid \mec{val} & & \\
+ \textit{Methods} & &
+   M &::= \mec{def}\ m(\overline{x : \tau}): \tau\  \{\ \mec{return}~e\ \} & &\\
+ \textit{Binary operators} & &
+   B &::= + \mid - \mid * \mid / & & \\
+ \textit{Expressions} & &
+   e &::= x \mid \mec{let}\ x = e\ \mec{in}\ e \mid e.m(\overline{e}) \mid e.f &  & \\
+ & & & \mid e\ B \ e \mid e(\overline{e}) \mid e = e \mid \mec{new}~C(\overline{e}) & & \\
+ & & & \mid \mec{if}\ e\ \mec{then}\ e\ \mec{else}\ e \mid e : \tau \mid v  \\
+ && v &::= \mec{true} \mid \mec{false} \mid n \mid \lambda (\overline{x : \tau}).e \mid \mec{null}\\
+ \textit{Types} & &
+   \tau & ::= C \mid \overline{\tau} \to \tau \mid \mec{int} \mid \mec{bool} \mid \mec{unit}
+ \end{align*}
+% \caption{\label{fig:language}Syntax of our object-oriented language}
+% \end{figure}
+
+
+%% The syntax of our object-oriented language is encoded using algebraic data
+%% types.
+A program consists of a list of class definitions. A class
+definition contains a list of field and method definitions. A
+field definition has a name, a type, and a mutability modifier
+(\ec{val} or \ec{var}). A method definition has a name, a list of
+parameters, a return type, and a method
+body. Traits and subtyping are added in Section~\ref{sec: traits}.
+%Traits contain required fields, method declarations and
+%default method implementations (details for subtyping via traits in Section~\ref{sec: traits}).
+Types are class names, function types or primitive
+types \ec{int}, \ec{bool} or \ec{unit}.
+%Note that an arrow type takes several parameter types, rather than relying on currying.
+
+Expressions are mostly standard for an object-oriented language.
+For simplicity we use a \ec{let} expression for introducing names
+and handling scopes (in the Encore compiler, an earlier phase
+translates an imperative style of variable declarations into
+\ec{let} form). Sequencing of statements can be emulated by
+binding the result of the statement to an unused variable:
+%
+``\ec{s1; s2}'' $\implies$ ``\ec{let _ = s1 in s2}'';
+%
+or by using a ``sequence expression'' containing a list of
+expressions, only the last of which is used for its value (this is
+the approach taken in the Encore compiler).
+%
+An anonymous function $\lambda(\overline{x : \tau}) . e$
+(\ec{Lambda} in Figure~\ref{fig:ast}) takes zero or more
+parameters. Note the difference between method calls, which call a
+method on a specified target, and function calls, which call a
+value of function type.
+
+%
+%\begin{figure*}[t]
+%\begin{minipage}[t]{.46\linewidth}
+%\begin{lstlisting}[style=encore,numbers=left]
+%hasType :: Env -> Expr -> Type -> Except TCError Expr
+%hasType env e expected = do
+%  e' <- typecheck env e
+%  let eType = getType e'
+%  unless (eType == expected) $
+%    throwError $ TypeMismatchError eType expected
+%  return $ setType expected e'
+%
+%instance Typecheckable Expr where
+%  typecheck env e@(VarAccess {name}) = do
+%    ty <- lookupVar env name (*@\label{code:lookupVar}@*)
+%    return $ setType ty e
+%\end{lstlisting}
+%\end{minipage}
+%%
+%\begin{minipage}[t]{.47\linewidth}
+%\begin{lstlisting}[style=encore,firstnumber=15,xleftmargin=6ex,numbers=left]
+%typecheck env e@(FunctionCall {target, args}) = do
+%    target' <- typecheck env target
+%    let targetType = getType target'
+%    unless (isArrowType targetType) $
+%      throwError $ NonArrowTypeError targetType (*@\label{code:throwError}@*)
+%    let (pTypes, rType) = (tparams targetType, tresult targetType)
+%    args' <- zipWithM (hasType env) args pTypes
+%    return $ setType rType e{target = target', args = args'}
+%
+%\end{lstlisting}
+%\end{minipage}
+%
+%\caption{Type checking function for expressions (excerpt)}
+%\label{fig:expressions}
+%\end{figure*}
+
+The task of the type checker is twofold: to ensure that the
+\astt{} is well-formed, and to decorate each expression node with
+its type.
+%
+Every expression in the \astt{} data type has a field \ec{etype},
+which has value \ec{Nothing} after parsing and which will be
+assigned a type during the type checking phase (this part of the
+design will be improved in Section~\ref{sec:phantom}).
+%
+Additionally, the type checker uses an environment, storing a map
+of all the classes of a program and all variables currently in
+scope.
+%
+Since we only allow assigning to immutable \ec{val} fields if we
+are currently in a constructor method, we also store a boolean
+flag to track this.
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+data Env = Env {ctable :: Map Name ClassDef
+                 ,vartable :: Map Name Type
+                 ,constructor :: Bool}
+\end{lstlisting}
+\end{minipage}
+
+We define a type class~\cite{TypeClasses} \ec{Typecheckable} with a single function
+\ec{typecheck} which takes such an environment and an \astt{} node, and
+returns either the decorated node, or an error value
+(\ec{TCError}) representing one of the ways type checking can
+fail. To avoid having to check if each computation fails or not,
+we use the exception
+monad~\cite{exception-monad}:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+data TCError = TypeMismatchError Type Type
+  | UnknownClassError Name
+  | NonArrowTypeError Type
+  | NonClassTypeError Type
+  | NonArrowTypeError Type
+  | UninferrableError Expr
+  | ..
+
+class Typecheckable a where
+  typecheck :: Env -> a -> Except TCError a
+\end{lstlisting}
+\end{minipage}
+
+Figure~\ref{fig:typecheckable} shows instances of
+\ec{Typecheckable} for programs, classes, fields, types and expressions
+(for brevity, we show an excerpt).
+%
+Type checking a program corresponds to checking its classes;
+%
+type checking a class corresponds to extending the environment to include the
+variable \ec{this} (Line~\ref{code:tcThis}), and checking its
+fields and methods (Lines~\ref{code:tcFields}--\ref{code:tcMethods});
+%
+type checking a type corresponds to checking that named classes
+exist~(Lines~\ref{code:start type}--\ref{code:finish type}).
+%
+Lines \ref{code:eg:functioncallStart}--\ref{code:eg:assignmentEnd}
+type check a function call and an assignment.
+%
+Note the helper function \ec{checkMutability} which ensures that
+immutable \ec{val} fields are only assigned through \ec{this} in a
+constructor.
+%
+The function
+\ec{hasType} (\emph{e.g.}, Lines~\ref{code:hasType1} and~\ref{code:hasType2}) is used
+whenever a certain type is expected (\emph{cf.} bidirectional
+typechecking~\cite{bidirectional}). To throw an error, we use the
+function \ec{throwError} from the exception monad library.
+
+For the Haskell novice, it is worth pointing out some of the
+constructs and functions used here (and later in the paper).
+%
+Almost all functions pattern matching on some algebraic data type
+uses the \ec{NamedFieldPuns} extension, which binds record fields
+of a parameter to variables of the same name (\emph{e.g.,}
+Lines~\ref{code:pun1} and \ref{code:pun2}).
+%
+% The \ec{mapM} function maps a monadic function over a list.
+%
+The \ec{(\$)} operator simply applies the function on its left to
+the value on its right (\emph{e.g.,} Lines~\ref{code:dollar},
+\ref{code:throwError} and \ref{code:eg:functioncallEnd}), which is
+mainly used for avoiding parentheses: \ec{f (g x)} \ec{==} \ec{f
+  \$ g x}.
+%
+Similarly, the \ec{(<\$>)} operator applies a function to the
+value inside a monad\footnote{Technically, the value only needs to
+  be inside a functor, but this distinction is not important
+  here.} (\emph{e.g.,} Line~\ref{code:fmap}), which avoids having
+to extract the value, apply the function, and put it back in the
+monad.
+
+The entry point to the type checker takes a program
+and runs the monadic type checking computation (with \ec{runExcept}) under a built
+environment (\ec{genEnv p}), and returns either an error or the decorated program:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+tcProgram :: Program -> Either TCError Program
+tcProgram p = runExcept $ typecheck (genEnv p) p
+\end{lstlisting}
+\end{minipage}
+
+%the function \ec{runExcept} runs the monadic computation and returns either a
+%type checking error or the decorated program.
+
+
+\section{Refactoring: Removing Boilerplate}
+\label{sec:reader}
+
+\begin{sloppypar}
+The type checking function, \ec{typecheck :: Env -> a -> Except TCError a},
+expects an environment, passed to each type checked node. This
+environment can be updated in the current scope, but the changes are forgotten as
+we exit the current scope -- the type checker does not return an updated environment.
+%
+For example, when type checking a class declaration, the
+variable \ec{this} (line~\ref{code:startFunEnv}) is added to the environment before
+type checking the fields and methods of the class declaration, as shown
+below~(lines~\ref{code:endFunEnv}--\ref{code:endFunEnv2}). When
+the fields and methods have been type checked, the variable \ec{this} is no longer
+accessible in the environment:
+\end{sloppypar}
+%
+%typecheck env e@(Lambda {params, body}) = do
+%  params' <- mapM (typecheck env) params
+%  let env' = addParameters env params (*@\label{code:startFunEnv}@*)
+%  body' <- typecheck env' body (*@\label{code:endFunEnv}@*)
+%  let parameterTypes = map ptype params'
+%      funType = Arrow parameterTypes getType body'
+%  return $ setType funType e{params = params', body = body'}
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore,numbers=left,xleftmargin=8ex]
+typecheck env cdef@ClassDef{cname, fields, methods} = do
+  let env' = addVariable env thisName (ClassType cname) (*@\label{code:startFunEnv}@*)
+  fields' <- mapM (typecheck env') fields (*@\label{code:endFunEnv}@*)
+  methods' <- mapM (typecheck env') methods (*@\label{code:endFunEnv2}@*)
+  return cdef{fields = fields', methods = methods'}
+\end{lstlisting}
+\end{minipage}
+
+% Motivation, why?
+A better design considers the environment as a global entity, and allows running
+computations under a modified environment when required.  This is the precise
+definition of the \ec{Reader} monad~\cite{reader-writer-monad}!
+%The \ec{typecheck} function already works in the exception monad, and we need to
+%update it to work in the \ec{Reader} monad as well.
+We update the \ec{typecheck} function to work with the \ec{Reader} monad.
+In functional programming languages, monad
+transformers compose monadic behaviours~\cite{monad-transformers},
+so that we can stack the \ec{Reader} monad onto the \ec{Except} monad.
+%Lets use the
+%\ec{ReaderT} transformer in the type signature of the type checking function:
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%typecheck :: a -> ReaderT Env (Except TCError a)
+%\end{lstlisting}
+%\end{minipage}
+%
+%This type could be more abstract and seems to suggest that there is an explicit
+%ordering when running the monadic computations. Lets fix these two issues with
+%the following alias, which defines a new type for the return type of the type
+%checking function and gives us flexibility to not care in which order we stack
+%the monadic computations, using common type classes for monads:
+%
+We use an alias to define a new type for the return type of the type checking
+function, using common type classes for monads:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+type TypecheckM a =
+    forall m. (MonadReader Env m, MonadError TCError m) => m a
+
+class Typecheckable a where
+  typecheck :: a -> TypecheckM a
+\end{lstlisting}
+\end{minipage}
+
+Now, instances of the \ec{Typecheckable}
+class do not pass the environment around explicitly -- instead it is available from
+the \ec{Reader} monad. With the use of the standard function \ec{local :: MonadReader r m => (r -> r) -> m a -> m a},
+the compiler runs a computation in a modified environment.
+%which
+%applies a function of type \ec{Env -> Env} to update the
+%environment for some computation.
+%
+%In the code below, type checking of fields and methods of a class
+%run under a modified a environment, where the variable \ec{this}
+%has been added. This is done with the helper function
+%\ec{addVariable}, %% (line~\ref{code:reader addVariable})
+%which injects a variable mapping in the environment:
+For example, type checking fields and methods of a class
+run under a modified environment -- the helper function
+\ec{addVariable} injects the variable \ec{this} to the environment.
+
+%In the code below, type checking of fields and methods of a class
+%run under a modified a environment -- the helper function
+%\ec{addVariable} injects the variable \ec{this} to the environment.
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+instance Typecheckable ClassDef where
+  typecheck cdef@ClassDef{cname, fields, methods} = do
+    let thisAdded = local $ addVariable thisName (ClassType cname) (*@\label{code:reader addVariable}@*)
+    fields' <- thisAdded $ mapM typecheck fields
+    methods' <- thisAdded $ mapM typecheck methods
+    return cdef{fields = fields', methods = methods'}
+\end{lstlisting}
+\end{minipage}
+
+To run the type checker, we update the function \ec{tcProgram} to
+run the reader monad transformer, which returns the exception monad. As before,
+we run the exception monad with the function \ec{runExcept}, returning either
+a type checking error or the program with typing information.
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+tcProgram :: Program -> Either TCError Program
+tcProgram p = runExcept (runReaderT (typecheck p) (genEnv p)))
+\end{lstlisting}
+\end{minipage}
+
+\section{Extension: Support for Backtraces}
+\label{sec:backtrace}
+
+% Comment: State the problem
+The current type checker returns the first error that occurs,
+%during the type checking phase,
+but does not point out \emph{where} this error occurred
+(\emph{e.g.}, in which method, in which class).
+%A good compiler reports the line number
+%and the expression that caused the problem, i.e., prints the backtrace of the program.
+In this section, we add support for backtraces, \emph{i.e.},
+tracking the positional context of the type checker.
+%
+The backtrace of a program is a list of backtrace nodes.
+Each backtrace node has specific information about the \astt{} node that it
+represents.
+%For example, the backtrace node \ec{BTClass} contains
+%information about a class definition.
+
+\begin{minipage}[t]{.55\linewidth}
+\begin{lstlisting}[style=encore]
+newtype Backtrace = Backtrace [BacktraceNode]
+data BacktraceNode = BTClass ClassDef
+  | BTMethod MethodDef
+  | BTField FieldDef
+  | BTParam Param
+  | BTExpr Expr
+  | BTType Type
+\end{lstlisting}
+%BTExpr Expr | ...
+\end{minipage}
+
+Type checking errors should have access to their backtrace, so that
+the compiler displays the backtrace as well as the error. We update the
+error data constructor, and create a separation of
+concerns between the error and its available~backtrace:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+data TCError = TCError Error Backtrace
+data Error = UnknownClassError Name
+  | TypeMismatchError Type Type
+  | ImmutableFieldError Expr
+  | ...
+\end{lstlisting}
+\end{minipage}
+
+The backtrace is updated
+whenever the type checker visits a new node,
+so that the position is tracked properly. The backtrace and type checker are similar to a stack machine:
+as soon as an \astt{} node is type checked, the compiler creates a backtrace node,
+and uses this information upon throwing an exception. If there is
+no exception, the compiler pops the node and gets back to the previous backtrace state.
+%This behaviour suggests that
+We place the backtrace in the environment, so that it is available
+from the \ec{Reader} monad:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+data Env = Env {bt :: Backtrace
+                 ,ctable :: Map Name ClassDef
+                 ,vartable :: Map Name Type
+                 ,constructor :: Bool}
+\end{lstlisting}
+\end{minipage}
+
+Even though here we are only using the backtrace to improve error
+messages, it could also be used to query the current context. For
+example, we could check whether we are currently in a constructor
+method without tracking it using the boolean flag
+\ec{constructor}. This is how the Encore compiler does it, but for
+simplicity in this presentation we keep the boolean flag.
+
+We can take advantage of the recursive nature of the type checker
+and update the backtrace before checking each node.
+To do this, we declare a type class
+\ec{Backtraceable}, and create instances for each \astt{} node.
+\ec{Backtraceable} has functions
+ \ec{backtrace} and \ec{push}: the
+former converts an \astt{} node into a \ec{BacktraceNode}; the latter
+prepends an \astt{} node to a backtrace.
+We also create instances of the \ec{backtrace} function for each \astt{} node:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+class Backtraceable a where
+  backtrace :: a -> BacktraceNode
+  push :: a -> Backtrace -> Backtrace
+  push x (Backtrace bt) = Backtrace (backtrace x : bt)
+
+instance Backtraceable ClassDef where backtrace = BTClass
+
+instance Backtraceable MethodDef where backtrace = BTMethod
+...
+\end{lstlisting}
+\end{minipage}
+
+To throw an error, we replace calls from \ec{throwError} to
+\ec{tcError}, which retrieves the backtrace from the
+environment, appends it to the type checking error, and throws the error.
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+tcError err = do
+  bt <- asks bt
+  throwError $ TCError err bt
+\end{lstlisting}
+\end{minipage}
+
+\begin{sloppypar}
+We refactor the \ec{Typecheckable} class with a new
+function, \ec{doTypecheck}, performing the actual type checking,
+%we reuse
+and define a default implementation of the \ec{typecheck} function,
+which converts and pushes the current node to the backtrace,
+before type checking:
+\end{sloppypar}
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+class Typecheckable a where
+  doTypecheck :: a -> TypecheckM a
+
+  typecheck :: (Backtraceable a) => a -> TypecheckM a
+  typecheck x = local pushBT $ doTypecheck x
+    where pushBT env@Env{bt} = env{bt = push x bt}
+\end{lstlisting}
+\end{minipage}
+
+Finally, we change
+\ec{typecheck} to
+\ec{doTypecheck} in the \emph{left-hand side} of all function
+definitions.
+The bodies of the type checking functions can remain
+as they are!
+%
+The extension of adding backtracing can be done \emph{without
+  rewriting the original implementation of the type checker}.
+
+\section{Extension: Addition of Warnings}
+\label{sec:warnings}
+
+A compiler should inform the developer of patterns that may trigger a bug,
+\textit{e.g.}, shadowing a variable.
+In this section, we add compiler support for
+warnings: the type checker will accumulate warnings
+and return them after type checking, if there are no errors.
+%
+A warning contains the information needed to create
+an understandable message, as
+well as a backtrace that identifies the position of the expression that
+triggered it:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+data TCWarning = TCWarning Warning Backtrace
+data Warning = ShadowedVarWrn Name | UnusedVariableWrn Name | ...
+\end{lstlisting}
+\end{minipage}
+
+At a first glance, one could think that a warning can be modelled inside the
+exception monad.
+However, the exception monad aborts type checking upon finding an error, whereas
+after finding a warning the type checker should continue, accumulating as many
+warnings as possible. Thus, warnings can be seen as a monotonically increasing
+list, for which we will use the \ec{Writer} monad~\cite{reader-writer-monad}.
+To integrate warnings into the type checking monad, we simply add a new
+constraint to the monad:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+type TypecheckM a = forall m. (MonadReader Env m,
+     MonadError TCError m, MonadWriter [TCWarning] m) => m a
+\end{lstlisting}
+\end{minipage}
+
+This additional constraint requires us to update the entry point
+of the type checker, since we also need to run the writer monad.
+%Again, the order in which the monads are composed
+%does not matter:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+tcProgram :: Program -> Either TCError (Program, [TCWarning])
+tcProgram p = runExcept $
+                  runReaderT (runWriterT (doTypecheck p)) (genEnv p)
+\end{lstlisting}
+\end{minipage}
+
+%The following function is used to emit warnings, amd access the environment,
+%fetches the backtrace and appends it to the warning:
+To emit a warning, we create a function that accesses the environment, fetches
+the current backtrace, and appends it to the~warning:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+tcWarning wrn = asks bt >>= \x -> tell [TCWarning wrn x]
+\end{lstlisting}
+\end{minipage}
+
+We use the standard function \ec{tell :: MonadWriter w m => w -> m ()},
+where \ec{MonadWriter} requires the type variable \ec{w} to
+be a monoid. This is trivially satisfied by the use of a list (of warnings).
+%which has concatenation as its binary operation and the empty list as its identity.
+%
+As an example, the following code raises a warning if introducing
+a variable shadows an old~one:
+%An example of using \ec{tcWarning} is defining a function which
+%emits a warning if introducing a new variable would shadow an old
+%one:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+checkShadowing name = do
+  shadow <- isBound name
+  when shadow $
+    tcWarning $ ShadowedVarWarning name
+\end{lstlisting}
+\end{minipage}
+
+
+Notice how \emph{we did not change the implementation of
+the type checker}, except when the type checker raises warnings.
+
+\section{Extension: Support Multiple Errors}
+\label{sec:multiple errors}
+
+The type checker reports a single error at a time.
+However, finding an error in one class should not prevent type
+checking other classes.
+%In Section~\ref{sec:warnings}
+%we used the \ec{Writer} monad to collect a list of
+%warnings, but this approach will not work directly for errors:
+%%
+%finding an expression that warrants a
+%warning allows us to continue checking the rest of the program,
+%finding an expression that fails to type check often means that it
+%is not meaningful to continue. For example, if the target \ec{x}
+%of a method call \ec{x.foo()} is an unbound variable, we cannot
+%investigate if \ec{foo} is a valid method to call.
+% since we don't
+%have a class to look up.
+
+To support multiple errors, we introduce a
+new combinator which ``forks'' two computations in the \ec{Except}
+monad, and either returns both of their results, or aggregates the
+errors of one or both of the computations. We abstract
+over how the errors are aggregated by requiring that the error
+data type is a \ec{Semigroup}:% (Figure~\ref{fig: semigroup}).
+
+%\begin{figure}[t]
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+(<&>) :: (Semigroup e, MonadError e m) => m a -> m b -> m (a, b)
+tc1 <&> tc2 = do
+  res1 <- (tc1 >>= return . Right) `catchError` (return . Left)
+  res2 <- (tc2 >>= return . Right) `catchError` (return . Left)
+  case (res1, res2) of
+    (Right v1, Right v2) -> return (v1, v2)
+    (Left e1, Left e2) -> throwError $ e1 <> e2
+    (Left e1, _) -> throwError e1
+    (_, Left e2) -> throwError e2
+\end{lstlisting}
+\end{minipage}
+%\caption{\label{fig: semigroup} The \ec{<&>}~combinator, used for error aggregation}
+%\end{figure}
+
+The forking combinator can also be used for mapping over~lists:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+forkM :: (Semigroup e, MonadError e m) => (a -> m b) -> [a] -> m [b]
+forkM _ [] = return []
+forkM f (x:xs) = uncurry (:) <$> (f x <&> forkM f xs)
+\end{lstlisting}
+\end{minipage}
+
+We generalise our exception type to contain a list of errors. A
+failing computation always contains at least one error, so we use
+the \ec{NonEmpty} list type and update the error throwing function:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+newtype TCErrors = TCErrors (NonEmpty TCError) deriving (Semigroup)
+type TypecheckM a = forall m.
+     (MonadReader Env m, MonadError TCErrors m) => m a
+
+tcError :: Error -> TypecheckM a
+tcError err = asks bt >>=
+    \x -> throwError $ TCErrors (NE.fromList [TCError err x])
+\end{lstlisting}
+\end{minipage}
+
+%With this machinery in place,
+Now, we insert the forking
+combinators wherever we want to aggregate error messages. In
+general, calls to \ec{mapM} can be replaced by \ec{forkM}.
+We update the implementation, and show an example
+that aggregates errors
+from type checking fields and methods of~a~class:
+%For
+%example, in order to aggregate errors from type checking all the
+%fields and methods of a class, the code is updated thusly:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+instance Typecheckable ClassDef where
+  doTypecheck cdef@ClassDef{cname, fields, methods} = do
+    (fields', methods') <-
+       local $ addVariable thisName (ClassType cname) $
+         forkM typecheck fields <&> forkM typecheck methods
+    return  cdef{fields = fields', methods = methods'}
+\end{lstlisting}
+\end{minipage}
+
+In contrast to  previous extensions, here we actually need to
+change small parts of the implementation,
+to aggregate multiple errors. However, the changes are
+never more complicated than replacing \ec{mapM} by \ec{forkM}
+and changing %\ec{r1 <- e1; r2 <- e2} into \ec{(r1, r2) <- e1 <&>  e2}.
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+r1 <- e1
+e2 <- e2
+\end{lstlisting}
+\end{minipage}
+%
+into \ec{(r1, r2)} \ec{<- e1 <&>  e2}.
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%(r1, r2) <- e1 <&> e2
+%\end{lstlisting}
+%\end{minipage}
+
+
+\paragraph{Multiple Errors Using \texttt{ApplicativeDo}}
+%\label{sec:applicativedo}
+%
+An alternative approach to aggregating multiple errors is based on
+using applicative functors (the \ec{Applicative} type class).
+Since the composition of two computations in an applicative
+functor cannot depend on each other, it is straightforward to
+merge the errors if they both fail. In the spirit of the previous
+sections however, we would like to avoid having to rewrite the
+existing monadic compiler in an applicative style.
+
+A way forward comes via the \ec{ApplicativeDo} extension for
+GHC~\cite{ApplicativeDo}. This extension allows desugaring \ec{do}
+notation, which normally is only available for monads, to use the
+operations of applicative functors whenever there are no
+dependencies between computations. We start by redefining the
+\ec{Except} data type used in our type checker so that it is an
+instance of \ec{Applicative}, where composition of two error
+values merges the errors: %(Figure~\ref{fig: multiple errors}).
+
+%\begin{figure}[t]
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore,numbers=none,xleftmargin=8px]
+data Except err a = Result a | Error err deriving(Show, Functor)
+
+instance Semigroup err => Applicative (Except err) where
+  pure = Result
+  Result f <*> Result a = Result $ f a
+  Error e1 <*> Error e2 = Error $ e1 <> e2
+  Error e1 <*> _ = Error e1
+  _ <*> Error e2 = Error e2
+
+instance Semigroup err => Monad (Except err) where
+  return = pure
+  Result a >>= f = f a
+  Error e >>= _ = Error e
+  (>>) = (*>)
+\end{lstlisting}
+\end{minipage}
+%\caption{\label{fig: multiple errors}Multiple errors using \ec{ApplicativeDo} notation}
+%\end{figure}
+
+By introducing the same definition of \ec{TCErrors} as above and
+enabling \ec{ApplicativeDo}, we can get multiple error messages in
+places where there are no dependencies between computations
+without changing the type checking code at all!\footnote{However,
+  this breaks the expected invariant that \ec{<*>} has the same
+  behaviour as \ec{ap} from the \ec{Monad} type class, since the
+  monad does \emph{not} merge error values. } This technique
+seems to be known in the Haskell community, but we do not know
+where it was first introduced.
+
+%
+%  (In Appendix~\ref{sec:applicativedo}, we show a different
+%approach for throwing multiple errors
+%using \ec{ApplicativeDo}.)
+
+\section{Refactoring: Type State Phases}
+\label{sec:phantom}
+
+One unattractive part of the current design (as well as the current design of the Encore compiler) is the way each
+expression carries its type around as a value which might be
+\ec{Nothing}. Forgetting to annotate some subexpression with its
+type in the type checking phase will cause later phases to abort
+when the necessary information is not present.
+%
+We could get around this by using two different data types---one
+with type annotations and one without---but this would require us
+to duplicate the expression type and keep the two versions in
+sync.
+
+Really, what we would like is for our implementation to be able to
+track which phase we are currently in, and only allow querying an
+expression for its type if it has passed the type checking phase.
+Similarly, an expression should only be allowed to pass the type
+checking phase if it has indeed been annotated with a type.
+Intuitively, we want the type checking function to have the type
+``unannotated expression $\rightarrow$ annotated expression'', and
+the \ec{getType} function to only accept annotated expressions.
+
+We propose type state~\cite{typestate,typestateFoundation} as a solution to this problem, based on
+phantom~types~\cite{phantom-types}. Instead of storing the type of
+an expression as \ec{Maybe Type}, we are going to parameterise the
+expression data type (and the other data types that pass through
+the type checker) with a type representing the current phase,
+which in turn carries the functor that the expression wraps its
+type in:
+
+\begin{minipage}[t]{.75\linewidth}
+\begin{lstlisting}[style=encore]
+data Expr (p :: Phase f) =
+    BoolLit {etype :: f (Type p), bval :: Bool}
+  | IntLit {etype :: f (Type p), ival  :: Int}
+  | Lambda {etype :: f (Type p)
+            ,params :: [Param p]
+            ,body  :: Expr p}
+  | MethodCall {etype  :: f (Type p)
+                ,target :: Expr p
+                ,name   :: Name
+                ,args   :: [Expr p]}
+  | ...
+\end{lstlisting}
+% | FieldAccess {etype  :: f (Type p)
+%                ,target :: Expr p
+%                ,name   :: Name}
+%data MethodDef (p :: Phase f) =
+%  MethodDef {mname :: Name, mparams :: [Param p]
+%              ,mtype :: Type p, mbody :: Expr p}
+\end{minipage}
+
+Note that \ec{p} is a type parameter of \emph{kind} \ec{Phase f}.
+The type parameter \ec{f} is going to be the \ec{Proxy} functor
+(from \ec{Data.Proxy}) for unannotated expressions, and the
+\ec{Identity} functor (from \ec{Data.Functor.Identity}) for
+annotated expressions. The former discards its wrapped value,
+while the latter stores it as is:
+
+\begin{minipage}[t]{.55\linewidth}
+\begin{lstlisting}[style=encore]
+data Proxy a = Proxy
+newtype Identity a = Identity {runIdentity :: a}
+\end{lstlisting}
+\end{minipage}
+
+To define the \ec{Phase} kind, we lift a regular data type to the
+kind level using the GHC extension \ec{DataKinds}. Since different
+phases carry different functors, we define it as a
+GADT~\cite{gadts-inference}:
+
+\begin{minipage}[t]{.55\linewidth}
+\begin{lstlisting}[style=encore]
+data Phase (f :: * -> *) where
+  Parsed  :: Phase Proxy
+  Checked :: Phase Identity
+\end{lstlisting}
+\end{minipage}
+
+With this change, we define the \ec{getType} function as
+
+\begin{minipage}[t]{.8\linewidth}
+\begin{lstlisting}[style=encore]
+getType :: Expr 'Checked -> Type 'Checked
+getType e = runIdentity (etype e)
+\end{lstlisting}
+\end{minipage}
+
+\noindent
+meaning it cannot be called unless the expression has been type
+checked. The type checking functions take an \astt{} node from
+phase \ec{Parsed} to phase \ec{Checked}. Note that we cannot use
+the (more intuitive) type ``\ec{a 'Parsed -> a 'Checked}'', since
+the two occurrences of the type parameter \ec{a} would have different kinds. Instead
+we use two different parameters, related by functional dependency:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+class Typecheckable a b | a -> b where
+  doTypecheck :: a 'Parsed -> TypecheckM (b 'Checked)
+
+  typecheck :: (Backtraceable (a 'Parsed))
+             => a 'Parsed -> TypecheckM (b 'Checked)
+  typecheck x = local (pushBT x) $ doTypecheck x
+\end{lstlisting}
+\end{minipage}
+
+%\section{Type State Phases: Building the Environment}
+%\label{sec:typing-state appendix}
+
+\begin{figure*}[t]
+\begin{minipage}[t]{.46\linewidth}
+\begin{lstlisting}[style=encore, numbers=none]
+data MethodEntry =
+  MethodEntry {meparams :: [Param 'Checked]
+               ,metype   :: Type 'Checked}
+
+data FieldEntry =
+  FieldEntry {femod  :: Mod
+              ,fetype :: Type 'Checked}
+
+data ClassEntry =
+  ClassEntry {cefields  :: Map Name FieldEntry
+              ,cemethods :: Map Name MethodEntry}
+
+data Env =
+    PreEnv {classes :: [Name]}
+  | Env {ctable :: Map Name ClassEntry
+         ,vartable :: Map Name (Type 'Checked)
+         ,constructor :: Bool}
+\end{lstlisting}
+\end{minipage}
+%
+\begin{minipage}[t]{.46\linewidth}
+\begin{lstlisting}[style=encore, numbers=none]
+genEnv :: Program 'Parsed -> TypecheckM Env
+genEnv (Program classes) = do
+  clsEntries <- mapM precheck classes
+  let cnames = map cname classes
+      duplicates = cnames \\ nub cnames
+  unless (null duplicates) $
+    throwError $ DuplicateClassError (head duplicates)
+  return Env {vartable = Map.empty
+             ,ctable = Map.fromList $ zip cnames clsEntries}
+
+instance Precheckable (ClassDef 'Parsed) ClassEntry where
+  precheck ClassDef {fields, methods} = do
+    fields' <- mapM precheck fields
+    methods' <- mapM precheck methods
+    let (fields'', methods'') = (map fname fields, map mname methods)
+    return ClassEntry {cefields = Map.fromList $ zip fields'' fields'
+                        ,cemethods = Map.fromList $ zip methods'' methods'}
+\end{lstlisting}
+\end{minipage}
+\caption{\label{fig:precheckable}Construction of an environment from the \emph{parsed} phase}
+\end{figure*}
+
+An important change is that the environment used for type checking
+must only contain well-formed types,
+%
+which requires us to check the interfaces of every class before
+checking any expressions.
+%
+Note that due to a chicken-and-egg problem, the environment
+can no longer contain full class definitions: in order to
+run the type checker we need a well-formed environment, but in
+order to get an environment containing well-formed classes we
+would need to run the type checker! Instead we change the
+environment to use special entries which only contain the
+(well-formed) types of classes, methods and fields (Figure~\ref{fig:precheckable}).
+%
+When building the environment, we use a simpler kind of
+environment which we dub a \emph{pre-environment} which simply
+contains a list of all the valid class names, allowing us to check
+the well-formedness of types. We call the process of checking the
+types used by classes, fields and methods \emph{pre-checking}, and
+use a type class scheme similar to the main type checker:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+class Precheckable a b | a -> b where
+  doPrecheck :: a -> TypecheckM b
+
+  precheck :: (Backtraceable a) => a -> TypecheckM b
+  precheck x = local (pushBT x) $ doPrecheck x
+\end{lstlisting}
+\end{minipage}
+
+Note that we reuse our type checking monad from before, including
+any of the previous extensions we might have added.
+%
+For each kind of \astt{} node \ec{a}, we define an instance
+\ec{Precheckable a b} which returns an entry of type \ec{b} that
+can be used by the environment being generated. For example,
+pre-checking a class generates a \ec{ClassEntry}, containing the
+(well-formed) types of all fields and methods (Figure~\ref{fig:precheckable}).
+
+After pre-checking, we have a well-formed environment (Line~\ref{code:type state: env} below) that we can
+use to type check the program just as before. With these changes, the entry point to the type checker
+takes an undecorated program and returns either a list of errors or
+the decorated program and a list of warnings.
+
+%For example, if we use the
+%pre-environment to look up the type of a field, this field must not
+%have an undefined type. Because of this, generating the
+%environment can now fail if it finds an undefined type.
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore,numbers=left,xleftmargin=8px]
+tcProgram :: Program 'Parsed
+           -> Either TCErrors (Program 'Checked, [TCWarning])
+tcProgram p = do
+  let preEnv = generatePreEnv p
+  (env, _) <- runExcept $ runReaderT (runWriterT (genEnv p)) preEnv (*@\label{code:type state: env}@*)
+  runExcept runReaderT (runWriterT (doTypecheck p)) env(*@\label{code:type state: tc}@*)
+\end{lstlisting}
+\end{minipage}
+
+This design decouples the type checking of interfaces from type
+checking the rest of a program, \textit{e.g.,} type errors in
+field or method definitions will not cause errors due to
+ill-formed types when type checking field accesses or method
+calls.
+%This design forces developers to get the types in place,
+%in order to built a well-defined environment, and type check the program only when there are
+%no unknown types.
+
+%
+
+%
+
+
+
+%
+By tracking the current phase in the type of an \astt{} node, we
+ensure that all \astt{} nodes go through the \ec{typecheck}
+function, and that it indeed returns checked \astt{} nodes.
+Haskell statically prevents compiler writers from using
+undecorated \astt{} nodes where one expects them to have typing
+information.
+%
+%Thanks to phantom types, the Haskell compiler now helps us ensure
+%that our type checking functions indeed return \astt{} nodes which
+%have been checked, and will statically notify us about the usage
+%of undecorated \astt{} nodes when one expects them to have typing
+%information.
+%
+With the exception of the environment generation and some type
+signatures, \emph{the original implementation of the type checker
+did not change notably}.
+
+%\section{Language features}
+%\label{sec:language features}
+%
+%A well-versed functional programmer may acknowledge
+%that our approach is from text-book, maybe even \emph{uninteresting}, even
+%when we have put together advanced functional ideas in the context of writing a compiler.
+%But, so far, we have ``only'' explained the design of the type checker. In this section,
+%we show evidence for how advanced \emph{object-oriented} language-level features, such as
+%parametric polymorphism~\cite{SystemFSubtyping,JavaGenerics},
+%subtyping (bounded quantification) via traits~\cite{traits}, (limited) support for
+%type inference, and the addition of capability-based annotations
+%akin to Encore's~\cite{DBLP:conf/ecoop/CastegrenW16,DBLP:conf/ecoop/CastegrenW17} or
+%Pony's type system~\cite{DBLP:conf/agere/ClebschDBM15}, can
+%be added to the current type checker with minor changes to its structure.
+
+\section{Feature: Parametric Polymorphism}
+\label{sec: generics}
+
+Parametric polymorphism, or in the Java jargon,
+generics~\cite{SystemFSubtyping,JavaGenerics}, allows code to be
+parameterised over one or more abstract type parameters, which can
+be instantiated with different concrete types at different use
+sites.
+%
+The addition of generics to the type checking monad adds an
+auxiliary field to the environment, \ec{typeParameters}, which
+keeps track of the available type parameters (which may be used as
+types).
+
+\begin{minipage}[t]{.50\linewidth}
+\begin{lstlisting}[style=encore]
+data Env = Env {ctable :: Map Name ClassDef
+                 ,vartable :: Map Name Type
+                 ,typeParameters :: [Type]
+                 ,bt :: Backtrace
+                 ,constructor :: Bool}
+\end{lstlisting}
+\end{minipage}
+
+The (initially empty) list of type parameters is built with the construction of the environment.
+Whenever polymorphic code introduces new type variables,
+one proceeds by running the type checker under a modified environment
+which contains these new type variables.
+%
+For example, the code below shows type checking for a polymorphic
+method. The field \ec{mtparams} contains a list of the formal type
+parameters of a method. These are added to the environment when
+checking the types of the method parameters\footnote{ Notice
+  the use of \ec{mapM_} instead of \ec{mapM}, which ignores the
+  result of the operation. } and the return type of
+the method, %(Lines~\ref{code:generics: type
+%  params env} and~\ref{code:generics: type params return}
+as well as when checking the body of the method:
+%(Lines
+%\ref{code:generics: body1} -- \ref{code:generics: body2})
+
+%\begin{figure}[ht]
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+doTypecheck m@(Method {mname, mtparams, mparams, mtype, mbody}) = do
+  local (addTypeParameters mtparams) $ mapM_ typecheck mparams (*@\label{code:generics: type params env}@*)
+  local (addTypeParameters mtparams) $ typecheck mtype (*@\label{code:generics: type params return}@*)
+  eBody <- local (addTypeParameters mtparams . (*@\label{code:generics: body1}@*)
+                    setConstructor mname .
+                    addParams mparams) $  hasType mbody mtype (*@\label{code:generics: body2}@*)
+\end{lstlisting}
+\end{minipage}
+%\caption{\label{fig:parametric polymorphism}Type checking of a parametric method}
+%\end{figure}
+
+In places where generic classes or methods are used, a map from
+formal type parameters to type arguments can be used to translate
+a polymorphic type to a concrete type. For example, if the
+following generic class
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore,xleftmargin=8ex]
+class C[a]
+  val f : a
+  def init(f: a): unit
+    this.f = f
+  end
+  def get(): a
+    this.f
+  end
+end
+\end{lstlisting}
+\end{minipage}
+
+\noindent
+is instantiated as \ec{C[int]}, the type checker applies the
+substitution $\{$\ec{a}$~\mapsto~$\ec{int}$\}$ to all looked up
+field and method types of the class
+%
+Some care must be taken to make type variables unique, but this
+can be achieved with regular alpha conversion~\cite{TAPL}.
+
+It is straightforward to infer type arguments for constructors of
+polymorphic classes, or polymorphic method and function calls, as
+long as all the type parameters are used in the arguments of the
+call.
+%
+For example, given the class above, the type of the expression
+\ec{new C(42)} is inferred as \ec{C[int]}. If a type variable is
+not used in a call (\emph{cf.} phantom
+types~\cite{phantom-types}), explicit type arguments must be
+provided.
+
+\section{Feature: Subtyping}
+\label{sec: traits}
+
+Subtyping is often considered one of the core features of
+object-oriented programming. Subtype polymorphism allows passing a
+value of type $S$ to code that expects a value of type $T$,
+whenever $S$ is a subtype of $T$. In Encore, we implement
+subtyping via \emph{traits}~\cite{traits}. This choice does not
+affect the overall design of the type checker much when compared
+to other subtyping mechanisms, such as class inheritance or
+interfaces.
+
+Traits can be thought of as a special kind of Java style
+interfaces, which can provide default implementations for methods
+(like in Java 8), but which may also require the presence of other methods
+or fields in the class including it. Overlapping requirements of
+two included traits is allowed, whereas overlapping method
+implementations need to be overridden by the including class.
+
+Figure~\ref{fig:traits example} shows an example of traits in
+action. The trait \ec{Showable} (Line~\ref{code:trait: declaration
+  1}) requires the presence of a method \ec{show}, and is
+equivalent to a Java interface. The trait \ec{Countable}
+(Line~\ref{code:trait: declaration 2}) requires the presence of an
+integer field \ec{f}, and \emph{provides} a method \ec{bump},
+which increments \ec{f} by one. The two traits are included by the
+class \ec{Cell} (Line~\ref{code:trait: instantiation trait}),
+which must provide the required fields and methods, but which also
+gets any methods provided by the traits; in this case the
+\ec{bump} method.
+
+\begin{figure}[ht]
+ \begin{lstlisting}[style=encore,xleftmargin=8ex,numbers=left]
+trait Showable (*@\label{code:trait: declaration 1}@*)
+  require def show() : String
+end
+
+trait Countable (*@\label{code:trait: declaration 2}@*)
+  require var f : int
+  def bump() : unit
+    this.f += 1
+  end
+end
+
+class Cell : Showable + Countable (*@\label{code:trait: instantiation trait}@*)
+  var f : int
+  def show() : String
+    int_to_string(this.f)
+  end
+end
+ \end{lstlisting}
+  \caption{
+    \label{fig:traits example} Example of traits}
+\end{figure}
+
+We extend the type checker to cater for traits, adding a subtyping
+relation between classes and their included traits. To distinguish
+between class types and trait types, the type checker needs to
+keep track of the declared traits of a program. We extend the
+environment with a new field \ec{traittable}.
+
+\begin{minipage}[t]{.50\linewidth}
+\begin{lstlisting}[style=encore]
+data Env = Env {ctable :: Map Name ClassDef
+                 ,traittable :: Map Name TraitDecl,
+                 ,vartable :: Map Name Type
+                 ,typeParameters :: [Type]
+                 ,bt :: Backtrace
+                 ,constructor :: Bool}
+\end{lstlisting}
+\end{minipage}
+
+When type checking a class that includes traits, the type checker
+checks well-formedness (lines~\ref{code:trait: wellformed}--\ref{code:trait: wellformed2})
+and trait requirements~(lines \ref{code:trait: req}--\ref{code:trait: req2}):
+
+\begin{minipage}[t]{.50\linewidth}
+\begin{lstlisting}[style=encore,numbers=left]
+doTypecheck c@(Class {cname, cfields, cmethods, ctraits}) = do
+  local addTypeVars $ mapM_ typecheck ctraits (*@\label{code:trait: wellformed}@*)
+  mapM_ isTraitType ctraits (*@\label{code:trait: wellformed2}@*)
+  mapM_ (meetRequiredFields cfields) ctraits (*@\label{code:trait: req}@*)
+  meetRequiredMethods cmethods ctraits
+  ensureNoMethodConflict cmethods ctraits(*@\label{code:trait: req2}@*)
+  ...
+\end{lstlisting}
+\end{minipage}
+
+
+
+Checking subtyping between a class type $C$ and a trait type $T$
+is as simple as looking up the declaration of $C$ and seeing if it
+includes $T$. We capture this in a function \ec{subtypeOf}, of type
+\ec{Type -> Type -> TypecheckM Bool}, that we use whenever we need
+to check subtyping (for example in the helper function \ec{hasType}).
+
+%%%%%%%%%%%%%%
+%When combined with parametric polymorphism, subtyping gives rise
+%to \emph{bounded
+%  polymorphism}~\cite{BoundedQuantification,traits}, where
+%%%%%%%%%%%%%%
+
+%\paragraph{Limited type inference support} Adding support for infering the parameters' types
+%   in method and function calls or inferring the type of class initialisers
+%   presents no problem. One can extend the environment with
+%   a new field that contains the inferred bindings.
+%  Given that the type parameters are known, on call-site, the type checker
+% fetches the formal declaration of the methods (functions), binding call-site types
+% with the formal type parameters. One needs to be careful with the implementation,
+% to correctly implement alpha renaming in case of parametric
+% classes that make a method call to another parametric class.
+%
+% \begin{minipage}[t]{.50\linewidth}
+% \begin{lstlisting}[style=encore]
+% data Env = Env {ctable :: Map Name ClassDef
+%                  ,abstractTraitTable :: Map String TraitDecl,
+%                  ,vartable :: Map Name Type
+%                  ,bindings :: [(Type, Type)]
+%                  ,typeParameters :: [Type]
+%                  ,bt :: Backtrace}
+%
+% \end{lstlisting}
+% \end{minipage}
+
+
+\section{Feature: Uniqueness Types}
+\label{sec: capabilities}
+
+In addition to standard object-oriented features, like
+polymorphism and subtyping, Encore supports a capability-based
+type system to prevent data-races~\cite{Kappa}. Part of this
+system involves reasoning about uniqueness (disallowing aliasing
+of an object), similar to languages like Rust~\cite{Rust} or
+Pony~\cite{DBLP:conf/agere/ClebschDBM15}. To maintain uniqueness,
+the compiler performs an additional pass over the program, called
+\emph{capture checking}, to ensure that unique variables are not
+duplicated.
+
+The capture checker traverses the \astt{} and marks each node as
+either \emph{free} or \emph{captured}. A free node is a node whose
+value is not being stored anywhere, whereas a captured node is one
+whose value is bound to some reference. For example, the
+expression \ec{new Foo()} is considered free (it has no existing
+references to it), whereas a variable $x$ is considered captured
+(its value is reachable through $x$). Whenever a value of unique
+type is used in a way that would capture it (\emph{e.g.}, when it
+is being bound to a variable), the capture checker ensures that
+the value is free, so that capturing it would not introduce
+overlapping references.
+
+Just as before (but ignoring phantom typed phases for clarity), we
+introduce a type class for capture checking:
+
+\begin{minipage}[t]{.80\linewidth}
+\begin{lstlisting}[style=encore,numbers=left]
+class Capturecheckable a where
+  capturecheck :: Pushable a => a -> TypecheckM a
+  capturecheck x = local (pushBT x) $ doCapturecheck x
+
+  doCapturecheck :: a -> TypecheckM a
+\end{lstlisting}
+\end{minipage}
+
+The capture checking pass uses the same monad as the type checker,
+enabling reuse of the features we have discussed in this paper. We
+can get error reporting with backtraces, warnings, and so on, out
+of the box.
+%
+To annotate the \astt{}, we extend each expression with a field
+\ec{captureStatus} of type \ec{Maybe CaptureStatus}, where
+\ec{CaptureStatus} is a data type simply defined as either
+\ec{Free} or \ec{Captured}.
+
+In order to be able to pass unique values around in variables,
+Encore uses \emph{destructive reads}~\cite{destructive} of the
+form \ec{consume x}, which reads \ec{x} and sets its value to
+\ec{null}. While reading a variable gives a captured value,
+reading a variable destructively results in a free value.
+%
+The following excerpt shows these rules, and the rule for \ec{let}
+expressions, which capture their bound value, and is free if and
+only if the body of the \ec{let} is free:
+
+\begin{minipage}[t]{.80\linewidth}
+\begin{lstlisting}[style=encore]
+instance Capturecheckable Expr where
+  doCapturecheck e@VarAccess{} =
+    return $ makeCaptured e
+
+  doCapturecheck e@Consume{} =
+    return $ makeFree e
+
+  doCapturecheck e@Let{(*@\texttt{val}@*), body} =
+    do (*@\texttt{val}@*)' <- capturecheck (*@\texttt{val}@*)
+       let ty = getType (*@\texttt{val}@*)'
+       when (isUniqueType ty) $
+         unless (isFree (*@\texttt{val}@*)') $
+           tcError $ UniqueCaptureError (*@\texttt{val}@*)' ty
+       body' <- capturecheck body
+       let e' = e{(*@\texttt{val}@*) = (*@\texttt{val}@*)', body = body'}
+       if isFree body then
+         return $ makeFree e'
+       else
+         return $ makeCaptured e'
+\end{lstlisting}
+\end{minipage}
+
+As this example shows, the infrastructure presented in this paper
+can be reused for other kinds of static analysis of an \astt{}.
+Any future extensions made to the typechecking monad would be
+useful for these analyses as well.
+
+\section{Related Work}
+
+%\ELIAS{This section reads a bit like a core dump of random bits
+%  and pieces of the compilers of related languages. What is the
+%  take-away here? Also, the language presented in this paper is a
+%  lot simpler than these languages, so the claims that the other
+%  compilers are more complex or less principled seems unfair.}
+
+In this section relate the Encore compiler to other compilers of
+functional and object-oriented languages.
+
+\subsection{Comparison with Functional Languages}
+
+In this section we compare our design with the compilers of
+three functional languages also written in Haskell: PureScript,
+Elm, and Haskell.
+
+\paragraph{PureScript}
+PureScript is a strongly typed, functional programming language that compiles to JavaScript~\cite{PurescriptBook}.
+Its syntax resembles Haskell, it is \emph{strictly} evaluated, and has an advanced type system
+with support for type classes, type inference, and extensions similar to Haskell's,
+such as \texttt{DataKinds} (\emph{cf.} Section~\ref{sec:phantom}).\footnote{More information
+\url{https://github.com/purescript/documentation/blob/master/language/Differences-from-Haskell.md\#extensions}}
+
+PureScript has a bidirectional type checker~\cite{bidirectionaltypechecking},
+encoded in a monadic design with the
+the \texttt{Except}, \texttt{State}, and \texttt{Writer} monads.
+%
+Warnings are accumulated in the \ec{Writer} monad, and are encoded using the error data type.
+Errors are accumulated in the \ec{Except} monad. This design decision means that one cannot differentiate
+warnings from errors, unless there is a monadic context. At the same time, it also allows an
+interplay between the \ec{Writer} and \ec{Except} monad, where one can lift
+a warning into an exception easily, given that they are of the same data type.
+
+PureScript's exception handling design is similar to ours, but differs in its implementation.
+To handle errors, PureScript first throws exceptions and
+then catches them at specific points to
+add more information, re-throwing the error to propagate it to higher levels.
+%This design decouples \astt{} nodes from the extra information added to the error.
+% now Encore
+Our design relies on the interplay between the \ec{Reader} monad
+and the \ec{Except} monad. Upon throwing an exception, we first get the backtrace information
+from the environment, create the appropriate error, and throw the exception.
+There is nothing preventing
+our design to use the \emph{throw-catch-rethrow} design used in PureScript.
+%
+In terms of throwing multiple errors, PureScript follows the same design
+as ours~(Section~\ref{sec:multiple errors}),
+except that it has been encoded differently.\footnote{\url{https://github.com/purescript/purescript/blob/b7b47b236e9892675c2e7854630f1ae5e219479c/src/Language/PureScript/Errors.hs\#L1505}}
+
+Overall, PureScript uses the techniques presented in this paper with some design variations.
+We see this as an indication that our design
+could be used for compilers of functional languages without having a negative impact on, \emph{e.g.,} type inference.
+%At the same time, we did not find documents in written form (not code) that explain
+%this monadic approach to design a compiler, which makes this report more relevant.
+
+\paragraph{Elm}
+Elm is a strongly typed, functional, reactive programming language for creating responsive, web-browser
+based graphical interfaces, compiling to JavaScript~\cite{Elm}.
+
+Elm is known for its detailed compiler messages with understandable backtraces.
+The type checker does not use a monadic approach, nor even a common
+functional style -- the type checker uses mutable references to register and keep track of variables. In many occasions,
+some of the boilerplate code is manually dealt with. For instance, errors
+could be easily accumulated using the \texttt{Except} monad, but Elm has a
+more imperative design approach:
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+addError :: State -> Error.Error -> State
+addError (State env rank errors) err = State env rank (err:errors)
+\end{lstlisting}
+\end{minipage}
+
+The \texttt{State} type contains an environment and a list of errors. The type checker does
+not throw monadic exceptions, but accumulates errors under this environment.
+Warnings are dealt with in a similar fashion to errors.
+
+We believe that parts of the compiler could be improved by the advanced functional features
+explained in this paper, such as the \texttt{Except} monad.
+For example, the compilation function (code below) uses helper functions
+(\textit{e.g.,} \texttt{typeCheck}) to pattern match on the result, do nothing if it
+is \texttt{Right}, or wrap the error into a new data type on the
+\texttt{Left} value. This is a clear case for throwing exceptions.
+
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=encore]
+compile pkg ifaces modul =
+  do  canonical   <- canonicalize pkg ifaces modul
+      annotations <- typeCheck modul canonical
+      ()          <- nitpick canonical
+      objects     <- optimize modul annotations canonical
+      return (Artifacts canonical annotations objects)
+
+typeCheck :: Module -> Module -> Either Error (Map Name Annotation)
+typeCheck modul canonical =
+  case unsafePerformIO (Type.run =<< Type.constrain canonical) of
+    Right annotations -> Right annotations
+    Left errs -> Left(E.BadTypes (Localizer.fromModule modul) errs)
+\end{lstlisting}
+\end{minipage}
+
+\paragraph{Haskell}
+
+Haskell is a lazy, pure, functional language with a state-of-the-art type system~\cite{HaskellReport}.
+It has support for type classes, type inference~\cite{haskellInference}, and advanced extensions.
+Haskell is the leading typed, functional programming language used in industrial settings.
+
+The Glasgow Haskell Compiler~\cite{GHC}, which is the de-facto standard Haskell compiler, uses a type checking monad \ec{TcM} to do type checking and renaming.
+The type checking monad acts like the \ec{Reader} monad with instances for the \ec{Except},
+\ec{Fix} and \texttt{MonadPlus} monads. (The monadic structure of the type checking monad
+is also used in other phases).
+%
+The \ec{TcM} monad maintains global and local environments, tracking
+top-level information from modules and local information, respectively.
+\ec{TcM} uses mutable references to keep track of changes that
+should be returned after type checking, for example,
+errors and warnings. Warnings are encoded in terms of errors,
+but use a type alias to differentiate warnings from errors when required.
+
+Type checking of expressions takes
+an \astt{} node, and an expected type, the type checker returns
+the new \astt{} node wrapped in the type checker monad, as per
+\ec{tcExpr :: HsExpr GhcRn -> ExpRhoType -> TcM (HsExpr GhcTcId)}.
+
+The main differences with our approach is that GHC's design uses
+the \ec{Reader} monad and mutable references to apply type changes on specific
+scopes and to accumulate errors and warnings.
+This is in contrast to our usage of the \ec{Reader} monad in all type checking places
+and the \ec{Writer} monad to accumulate warnings. Our design, which is also simpler,
+does not make use of the \ec{IO} monad, given that we use the \ec{Writer}
+and \ec{State} monads to accumulate errors and warnings. Finally,
+the monadic structure of our type checking monad can also be reused
+in other phases of the compiler.
+
+\subsection{Comparison with Object-Oriented Languages}
+
+In this section we compare our current design with
+the Scala compiler.
+
+\paragraph{Scala Compiler}
+Scala is an object-oriented language with an advanced type system,
+with support for functional programming~\cite{scalac}. It provides subtyping via inheritance, traits,
+and type classes.
+
+Regarding the implementation of the compiler's AST,
+Scala implements a DSL to generate AST nodes.
+%\footnote{\url{https://github.com/scala/scala/blob/v2.12.4/src/compiler/scala/tools/nsc/ast/TreeDSL.scala\#L127}}.
+Their encoding uses classes, traits, case classes, and implicit conversions; to create flexible \astt{} node transformations,
+their design uses inheritance and subtyping. This design is much more advanced than
+our simple encoding of ASTs.
+
+
+Scala's design to handle errors and warnings
+uses inheritance and subtyping.
+%\footnote{\url{https://www.scala-lang.org/api/2.12.4/scala-compiler/scala/tools/nsc/reporters/Reporter.html}}.
+This design decision favours the creation of new subclasses to provide
+different implementations, such as a storing class that
+accumulates errors (similar to the one in this article), to a side-effecting class that prints errors.
+Our implementation is more principled due to Haskell's type system, where
+side-effects are captured at the type-level. However, as is common in functional programming,
+adding a new data value implies the explicit management of this data value -- this is the problem known as the Expression Problem~\cite{exprProblem1,exprProblem2,exprProblem3} (to which several solutions exist, \emph{e.g.,}~\cite{ernst2004expression,Extensibility,DataTypesCarte,ExpressionRevisited}).
+% \ELIAS{I do not understand this}\KIKO{reference to expression problem}
+%
+%\item[Environment] \TODO{I believe our usage of the Reader monad is cleaner than what they have, since they require the construction
+%of new contexts.}
+%
+%\item[Typing State]
+
+
+% Object-oriented languages support type state programming~\cite{typestateInJava,typestateInJava2},
+% so we believe that the Scala compiler could apply this technique through its numerous phases~\cite{scalaPhases}.
+
+% \paragraph{Java Compiler (openjdk)}
+%Java is the de facto, industrial, object-oriented language.
+%It offers subtyping via inheritance.
+%% We have shown how using a functional approach allows to easily extend the compiler.
+%% We compare our final design against the design of an object-oriented compiler, the Java compiler.~\footnote{\url{https://hg.openjdk.java.net/jdk9/hs/langtools/file/b398971f7b6f/src/java.compiler/share/classes/javax/lang/model/util/AbstractElementVisitor8.java}}.
+%
+% The Java compiler encodes \astt{} nodes, types, and environments using classes and inheritance. %, to represent multiple types.
+% In order to support unknown future operations, they use the visitor
+% pattern.
+%% ~\footnote{\url{https://hg.openjdk.java.net/jdk9/hs/langtools/file/b398971f7b6f/src/jdk.compiler/share/classes/com/sun/tools/javac/code/Type.java\#l671}}.
+% Functional programming implicitly decouples the behaviour of the type from the type itself,
+%\textit{i.e.,} adding new functionality means adding a new function that deals with all the types, so there
+%is no need for adding advanced patterns, such as the visitor design pattern.
+%
+%For the encoding of \astt{} nodes, the Java compiler uses an \ec{Element} interface and an \ec{enum}, to indicate of which kind
+%is the element (\textit{kind} here refers to \ec{CLASS}, \ec{METHOD}, \ec{PARAMETER}, etc),
+%the same approach is used for types, using a switch case statement for primitive types.
+%%\footnote{\url{https://hg.openjdk.java.net/jdk9/hs/langtools/file/b398971f7b6f/src/java.compiler/share/classes/javax/lang/model/element/ElementKind.java}},
+%%~\footnote{\url{https://hg.openjdk.java.net/jdk9/hs/langtools/file/b398971f7b6f/src/jdk.compiler/share/classes/com/sun/tools/javac/code/Type.java\#l671}}.
+%
+%Regarding the encoding of the Environment, this is represented by an abstract class
+%and multiple implementations. To extend the scope, the Java compiler duplicates the
+%environment and adds new symbols.
+%
+%The Java compiler keeps track of which compilation
+
+\section{Discussion and Lessons Learned}
+\label{sec: discussion}
+
+% This structure is taken from
+% Experience Report: Growing and Shrinking Polygons for Random Testing of Computational Geometry Algorithms
+% by Ilya Sergey
+
+In this section we discuss the project on a higher level and list
+some of the things we learned in the process.
+
+\paragraph{Our Background}
+
+When this project started, we were a group of researchers familiar
+with functional programming as a whole; we had not previously developed
+more than toy programs in Haskell.
+%
+Some of us were familiar with Haskell as a general purpose language,
+but not so much with its advanced typing features and abstractions,
+such as generalised algebraic data types,
+monads, or monad transformers.
+
+We were not used to thinking in terms
+of algebraic structures, \textit{e.g.,} semigroups and monoids.
+We were also not familiar with GHC extensions, such as functional dependencies and others,
+which are invaluable for writing Haskell code.
+
+The decision to use Haskell was more or less arbitrary, but it
+turned out to be the right choice in terms of maintainability and
+flexibility of the compiler.
+%We did however encounter many runtime errors in the development of our language.
+
+\paragraph{What Didn't Work So Well}
+
+As with any new language, there is a learning curve and it took some
+time for new people joining the project to be familiar and productive
+with the language.
+%
+Debugging  was not easy, and we still mainly rely on
+prints from the \ec{trace} function in module \ec{Debug.Trace}.
+
+When we started this project, we could not find explanations for
+how to create a compiler using Haskell's features, putting
+together advanced concepts in small steps, as we do here. We were
+able to follow the functional literature, but we had to put the
+pieces back together on our own.
+
+The intuition to type state using phantom types and the kinding system
+is rough to grasp at the beginning, and during the implementation we felt we were
+guided by gut feeling, rather than deep knowledge. For this reason,
+we believe that an experience report like this can shed some light
+on how to do simple type-level programming in the context of a compiler, in Haskell.
+
+The type state implementation was developed specifically for
+the type checker of the language presented in this paper, and has yet
+to be added to Encore. We do not think that this involves
+substantially more work than the changes explained in this paper.
+
+\paragraph{What Can You Learn From This Experience?}
+
+We hope that this experience report can serve as a solid basis
+for future researchers and practitioners
+interested in developing static tools or compilers in Haskell.
+
+We believe that this report shines light on how to write a compiler (static analysis tool),
+leveraging high-level (type) abstractions. The related work on functional languages
+confirms that this design is also applicable to compilers of functional languages.
+We do not claim the originality of the techniques,
+but we believe that this report can still be helpful in spreading the gospel of
+the monadic design to developers of object-oriented languages.
+
+\paragraph{Brief Comparison to the Encore Compiler}
+
+This paper pre\-sents a subset of the full Encore language. In
+addition to the features we have seen so far, Encore supports
+concurrency based on actors and tasks, together with a
+capability-based type system for ensuring the absence of
+data-races~\cite{Kappa}. There are also arrays, global and local
+functions, mutable and immutable variables, algebraic data types
+and pattern matching, and other features that naturally make the
+compiler more complicated. This means that the source code of the
+Encore compiler is more complicated than the code presented in
+this paper. Still, we argue that the \emph{overall design} is the
+same for both compilers.
+
+As an example of the differences between our presentation and the
+real thing, we include the type checking code for assignments from
+the Encore compiler, and discuss some of the differences from the
+code in Figure~\ref{fig:typecheckable}:
+
+\begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck assign@(Assign {lhs = lhs@VarAccess{qname}, rhs}) =
+  do eLhs <- typecheck lhs
+     varIsMutable <- asks $ isMutableLocal qname
+     varIsLocal <- asks $ isLocal qname
+     unless varIsMutable $
+            if varIsLocal
+            then tcError $ ImmutableVariableError qname
+            else pushError eLhs NonAssignableLHSError
+     eRhs <- hasType rhs (AST.getType eLhs)
+     return $ setType unitType assign {lhs = eLhs, rhs = eRhs}
+
+doTypecheck assign@(Assign {lhs, rhs}) =
+  do eLhs <- typecheck lhs
+     unless (isLval eLhs) $
+            pushError eLhs NonAssignableLHSError
+     context <- asks currentExecutionContext
+     case context of
+       MethodContext mtd ->
+         unless (isConstructor mtd && isThisFieldAccess eLhs) $
+           assertNotValField eLhs
+       _ -> assertNotValField eLhs
+     eRhs <- hasType rhs (AST.getType eLhs)
+     return $ setType unitType assign {lhs = eLhs, rhs = eRhs}
+\end{lstlisting}
+%     where
+%       assertNotValField f
+%       | FieldAccess {target, name} <- f = do
+%           let targetType = AST.getType target
+%           fdecl <- findField targetType name
+%           when (isValField fdecl) $
+%                tcError $ ValFieldAssignmentError name targetType
+%       | otherwise = return ()
+
+Since Encore has global variables in the form of global functions,
+we separate type checking of assignment into two cases. If we are
+assigning a variable, we ensure that it is a mutable, local
+variable (and raise an informative error if it is not). Note the
+use of \ec{pushError}, which pushes an expression onto the
+backtrace before throwing an error. This is used to make an error
+message focus on a child of the current expression.
+
+The case where we are not assigning a variable is mostly similar
+to the example in Figure~\ref{fig:typecheckable}. The main
+difference is that we use the backtrace to get the current
+execution context (a method, a function, or a closure) and check
+if we are currently inside a constructor, rather than storing this
+information directly as a flag in the environment as in
+Section~\ref{sec:oop}.
+
+\section{Conclusion}
+
+A huge part of writing code is finding the right abstractions.
+Haskell proved to be the right tool for us for writing a compiler
+for our concurrent, object-oriented language.
+%During the development of the compiler, we have learned that adding new
+%compiler features does not need to involve big refactorings.
+As shown in this report, we monotonically added compiler extensions
+to a core type checker, without any substantial changes to the original code.
+
+In this report we also show how to add language-level features,
+such as parametric polymorphism and subtyping. We finished by
+showing that the monadic design can be reused for new phases doing
+static analysis, and that these phases immediately gets access to
+an environment, and the warning and exception systems, for free.
+
+%
+% Links to the source code for the type checker
+% is available in the appendix.
+
+% Acknowledgments, optional
+\begin{acks}
+  Kiko Fernandez-Reyes' work on this paper was funded by the SCADA
+  project. Elias Castegren's work on this paper was funded by KTH
+  Royal Institute of Technology. We are grateful to Viktor
+  Palmkvist for pointing out the usage of \ec{ApplicativeDo} to
+  support multiple errors, and to the anonymous reviewer who
+  suggested an improvement to the type state implementation. We
+  are also grateful to Stephan Brandauer, Tobias Wrigstad, Dave
+  Clarke, and Albert Mingkun Yang who influenced the design of the
+  Encore compiler.
+\end{acks}
+
+%\begin{figure*}
+%   \centering
+%   \begin{subfigure}[t]{0.4\textwidth}
+% \begin{lstlisting}[language=Haskell,style=encore]
+%doTypecheck fcall@(FunctionCall {emeta, qname, args, typeArguments}) = do
+% result <- findVar qname
+% (qname', ty) <- case result of
+%   Just (qname', ty) -> return (qname', ty)
+%   Nothing -> tcError $ UnboundFunctionError qname
+% if isArrayType ty && length args == 1 then
+%   doTypecheck ArrayAccess{emeta
+%                           ,target = VarAccess{emeta, qname}
+%                           ,index = head args}
+% else if (isArrowType ty) then do
+%   let typeParams  = getTypeParameters ty
+%       argTypes    = getArgTypes ty
+%       resultType  = getResultType ty
+%       actualLength = length args
+%       expectedLength = length argTypes
+%       defName = qname'{qnlocal = Name $ "_" ++
+%                 show qname ++
+%                 show (expectedLength - actualLength)}
+%   calledName <-
+%     if (actualLength == expectedLength)
+%        then return qname'
+%        else do
+%          result2 <- findVar defName
+%          case result2 of
+%            Just (qname2, ty2) -> return defName
+%            Nothing -> tcError $ WrongNumberOfFunctionArgumentsError
+%                          qname (length argTypes) (length args)
+%   (eArgs, returnType, typeArgs) <-
+%      if null typeArguments
+%      then inferenceCall fcall typeParams (take actualLength argTypes) resultType
+%      else do
+%        unless (length typeArguments == length typeParams) $
+%          tcError $ WrongNumberOfFunctionTypeArgumentsError qname
+%                    (length typeParams) (length typeArguments)
+%        typecheckCall fcall typeParams (take actualLength argTypes) resultType
+%   return $ setArrowType ty $
+%       setType returnType fcall {args = eArgs,
+%                                 qname = calledName,
+%                                 typeArguments = typeArgs}
+% else do tcError $
+%   ExpectingOtherTypeError "an array or a function call" ty
+%\end{lstlisting}
+%   \end{subfigure}
+% \quad
+%   \begin{subfigure}[t]{0.4\textwidth}
+% \begin{lstlisting}[language=Haskell,style=encore]
+%doTypecheck (FunctionCall {target, args}) = do
+% target' <- typecheck target
+% let targetType = getType target'
+% unless (isArrowType targetType) $
+%   tcError $ NonArrowTypeError targetType
+% let paramTypes = tparams targetType
+%     resultType = tresult targetType
+% args' <- zipWithM hasType args paramTypes
+% return FunctionCall {etype = Just resultType
+%                     ,target = target'
+%                     ,args = args'}
+% \end{lstlisting}
+% \end{subfigure}
+% \label{fig: function-call}
+%\caption{Type checking function calls. The implementation of the
+%Encore compiler is on the left, while the implementation from the paper is on the right.}
+%\end{figure*}
+
+\bibliography{biblio}
+\end{document}
+
+\appendix
+
+\newpage
+
+\section{Comparison Between Encore and Paper Implementation}
+
+In this section we explain the main differences between the
+implemention of the Encore compiler and the implementation shown
+in this paper. For this comparison, we consider the
+final design explained in the paper, \textit{i.e.,} all the extensions added.
+
+We start the comparison by showing the implementation
+of type checking classes, methods, and representative expressions
+which include \ec{if-then-else}, casts, field accesses, and assignments.
+
+Figure~\ref{fig: class} shows the implementation of the type checker
+for the Encore language (Figure~\ref{fig: class enc}) and the implementation from the paper (Figure~\ref{fig: class paper}).
+Encore's language allows capability modes to appear at class' declaration
+sites. This complexity is shown in the type checker's implementation
+in Figure~\ref{fig: class enc} (lines~\ref{code:enc:class start}--\ref{code:enc:class end}).
+If we omit these lines, the main difference between the Encore implementation and
+the version shown in this paper is that Encore's type checker allows
+parametric polymorphism (lines~\ref{code:enc:class poly}--\ref{code:enc:class poly2}),
+while the version from the paper does not. The other difference is that
+the version explained in the paper can throw multiple errors, while the
+Encore compiler has not yet added this feature.
+
+\begin{figure*}
+ \centering
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore,numbers=left]
+doTypecheck
+  c@(Class {cname, cfields, cmethods, ccomposition}) = do
+  -- Passive class vs Actors (*@\label{code:enc:class start}@*)
+  when (isPassiveClassType cname) $
+    when (any isForwardMethod cmethods) $
+      tcError $ ForwardInPassiveContext cname
+  -- Traits
+  let traits = typesFromTraitComposition ccomposition
+      eTraits = extendedTraitsFromComposition ccomposition
+  local (addTypeVars . addThis) $
+      mapM_ checkType traits
+  mapM_ (meetRequiredFields cfields) traits
+  meetRequiredMethods cmethods traits
+  ensureNoMethodConflict cmethods traits
+  -- Capabilities
+  checkManifestModes traits
+  mapM_ (ensureMatchingTraitFootprint cname eTraits) eTraits
+  noOverlapFields cname ccomposition
+  checkMethodExtensionAllowed
+  checkOverriding cname typeParameters cmethods eTraits(*@\label{code:enc:class end}@*)
+  -- Type checking fields and methods
+  efields <- local (addTypeVars . addThis) $ (*@\label{code:enc:class poly}@*)
+             mapM typecheck cfields
+  emethods <- local (addTypeVars . addThis) $
+              mapM typecheck cmethods(*@\label{code:enc:class poly2}@*)
+  return c{cmethods = emethods, cfields = efields}
+ \end{lstlisting}
+ \caption{ \label{fig: class enc}Encore's type checker implementation}
+ \end{subfigure}
+ \qquad
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+ doTypecheck ClassDef{cname, fields, methods} = do
+    (fields', methods') <-
+                           local (addVariable thisName (ClassType cname)) $
+                           forkM typecheck fields <&>
+                           forkM typecheck methods
+    return ClassDef {cname
+                    ,fields = fields'
+                    ,methods = methods'}
+ \end{lstlisting}
+ \caption{  \label{fig: class paper}Paper's type checker implementation}
+ \end{subfigure}
+ \caption{ \label{fig: class}Type checking classes}
+\end{figure*}
+
+Type checking methods~(Figure~\ref{fig: method}) are really similar,
+except that it is more complex in the Encore language~(Figure~\ref{fig: method enc}). Figure~\ref{fig: method paper}
+shows the implementation explained in the paper, type checking the return
+type and parameters (equivalent to Encore's, lines~\ref{code:enc:method param}--\ref{code:enc:method param2})
+and the body of the method (equivalent to Encore's in lines~\ref{code:enc:method body}--\ref{code:enc:method body2}).
+Encore's version also needs to check whether the method is a streaming method
+(outside of the scope of the paper) and whether there are local functions, which
+are functions that can only be called from the defining method.
+
+\begin{figure*}
+ \centering
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore,numbers=left]
+doTypecheck m@(Method {mbody, mlocals}) = do
+  let mType   = methodType m
+      mparams = methodParams m
+      mtypeparams = methodTypeParams m
+      body = Util.markStatsInBody mType mbody
+  local (addTypeParameters mtypeparams) $ (*@\label{code:enc:method param}@*)
+         mapM_ typecheck mparams
+  local (addTypeParameters mtypeparams) $
+        checkType mType (*@\label{code:enc:method param2}@*)
+  eBody <-(*@\label{code:enc:method body}@*)
+      local (addTypeParameters mtypeparams .
+             addParams mparams .
+             addLocalFunctions mlocals) $
+                 if isUnitType mType || isStreamMethod m
+                 then typecheckNotNull body
+                 else hasType body mType(*@\label{code:enc:method body2}@*)
+  when (isMatchMethod m) $ checkPurity eBody
+  eLocals <- local (addTypeParameters mtypeparams .
+                    addLocalFunctions mlocals .
+                    dropLocal thisName) $
+                   mapM typecheck mlocals
+  return m{mbody = eBody
+          ,mlocals = eLocals}
+ \end{lstlisting}
+ \caption{ \label{fig: class enc}Encore's type checker implementation}
+ \end{subfigure}
+ \qquad
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck MethodDef {mname, mparams, mbody, mtype} = do
+  (mparams', mtype') <- forkM typecheck mparams <&>
+                        typecheck mtype
+  mbody' <- local (addParameters mparams') $ hasType mbody mtype'
+  mapM_ (checkVariableUsage mbody') (map pname mparams')
+  return MethodDef {mname
+                   ,mparams = mparams'
+                   ,mtype = mtype'
+                   ,mbody = mbody'}
+ \end{lstlisting}
+ \caption{  \label{fig: method paper}Paper's type checker implementation}
+ \end{subfigure}
+ \caption{ \label{fig: method}Type checking methods}
+\end{figure*}
+
+
+Figure~\ref{fig: if-then-else} and \ref{fig: cast} shows the implementation of type checking
+conditional logic and casting operations, respectively. Type checking condition logic
+(Figure~\ref{fig: if-then-else enc} and \ref{fig: if-then-else paper})
+uses the same implementation, with the exception that Encore's type checker
+has subtyping rules to perform a coercion, when necessary. Type checking
+a casting operation is basically the same in Encore's and the explanation of this paper,
+with the exception Encore deals also with subtyping.
+
+\begin{figure*}
+ \centering
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck ifThenElse@(IfThenElse {cond, thn, els}) =
+  do eCond <- hasType cond boolType
+     eThn <- typecheck thn
+     eEls <- typecheck els
+     let thnType = AST.getType eThn
+         elsType = AST.getType eEls
+     resultType <- matchBranches thnType elsType
+     thnTypeInf <- if knownType thnType
+                   then return thnType
+                   else thnType `coercedInto` resultType
+     elsTypeInf <- if knownType elsType
+                   then return elsType
+                   else elsType `coercedInto` resultType
+     return $ setType resultType
+              ifThenElse {cond = eCond
+                         ,thn = setType thnTypeInf eThn
+                         ,els = setType elsTypeInf eEls}
+ \end{lstlisting}
+   \caption{\label{fig: if-then-else enc}Encore's type checker implementation}
+ \end{subfigure}
+ \qquad
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck (If {cond, thn, els}) = do
+  cond' <- hasType cond BoolType
+  thn' <- typecheck thn
+  let thnType = getType thn'
+  els' <- hasType els thnType
+  return If {etype = Identity thnType
+            ,cond = cond'
+            ,thn = thn'
+            ,els = els'}
+ \end{lstlisting}
+  \caption{\label{fig: if-then-else paper}Paper's type checker implementation}
+ \end{subfigure}
+ \caption{ \label{fig: if-then-else}Type checking conditional logic}
+\end{figure*}
+
+
+\begin{figure*}
+ \centering
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck te@(TypedExpr {body, ty}) =
+    do ty' <- checkType ty
+       eBody <- typecheck body
+       bodyType <- AST.getType eBody `coercedInto` ty'
+       let eBody' = setType bodyType eBody
+       return $ setType ty' $ te{body = eBody', ty = ty'}
+ \end{lstlisting}
+ \caption{\label{fig: cast enc}Encore's type checker implementation}
+ \end{subfigure}
+ \qquad
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck (Cast {body, ty}) = do
+  ty' <- typecheck ty
+  body' <- hasType body ty'
+  return Cast {etype = Identity ty'
+              ,body = body'
+              ,ty = ty'}
+ \end{lstlisting}
+ \caption{\label{fig: cast paper}Paper's type checker implementation}
+ \end{subfigure}
+ \caption{\label{fig: cast}Type checking the casting operator}
+\end{figure*}
+
+Type checking fields in Encore (Figure~\ref{fig: field enc}) follows the same
+basic structure as type checking in the object-oriented language presented in
+the paper~(Figure~\ref{fig: field paper}). The main difference is that Encore's
+type checker needs to check whether the target field is \ec{this} to forbid it
+from escaping the current actor, as that could introduce data races~\cite{Kappa}
+(Figure~\ref{fig: field enc}, lines~\ref{code:enc:field
+  mode}--\ref{code:enc:field mode2}); Encore also checks that the current target
+is either \ec{this} or a passive class (a normal Java class) with capability
+annotation, otherwise it throws an error~(Figure~\ref{fig: field enc},
+lines~\ref{code:enc:field check}--\ref{code:enc:field check2}).
+
+\begin{figure*}
+ \centering
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck fAcc@(FieldAccess {target, name}) = do
+  eTarget <- typecheck target
+  let targetType = AST.getType eTarget
+  isActive <- isActiveType targetType (*@\label{code:enc:field mode}@*)
+  let accessedType = if isThisAccess eTarget && isActive
+                     then makeLocal targetType
+                     else targetType(*@\label{code:enc:field mode2}@*)
+      eTarget' = setType accessedType eTarget
+  unless (isThisAccess eTarget' || (*@\label{code:enc:field check}@*)
+          isPassiveClassType targetType &&
+          not (isModeless targetType)) $
+    tcError $ CannotReadFieldError eTarget(*@\label{code:enc:field check2}@*)
+  fdecl <- findField targetType name
+  let ty = ftype fdecl
+  checkFieldEncapsulation name eTarget ty
+  return $ setType ty fAcc {target = eTarget'}
+ \end{lstlisting}
+   \caption{\label{fig: field enc}Encore's type checker implementation}
+ \end{subfigure}
+ \qquad
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck (FieldAccess {target, name}) = do
+  target' <- typecheck target
+  let targetType = getType target'
+  FieldEntry {fetype} <- findField targetType name
+  return FieldAccess{target = target'
+                    ,etype = Identity fetype
+                    ,name }
+ \end{lstlisting}
+   \caption{\label{fig: field paper}Paper's type checker implementation}
+ \end{subfigure}
+ \caption{\label{fig: field}Type checking field accesses}
+\end{figure*}
+
+
+Assignment in Encore is dealt with in two functions~(Figure~\ref{fig: assign enc}): the first function type
+checks when the left-hand side of an assignment is a variable access, which is
+allowed as long as the variable is mutable and exists in the environment.
+The second function deals with the remaining cases of the left-hand side of an assignment,
+omitting the cases where a field was declared immutable because immutable fields are assigned
+in the constructor. The approach presented in the paper~(Figure~\ref{fig: assign paper}) does not care about constructors,
+because we do not have them and rely on initialisation after instantiation.
+
+\begin{figure*}
+ \centering
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck assign@(Assign {lhs = lhs@VarAccess{qname}, rhs}) =
+  do eLhs <- typecheck lhs
+     varIsMutable <- asks $ isMutableLocal qname
+     varIsLocal <- asks $ isLocal qname
+     unless varIsMutable $
+            if varIsLocal
+            then tcError $ ImmutableVariableError qname
+            else pushError eLhs NonAssignableLHSError
+     eRhs <- hasType rhs (AST.getType eLhs)
+     return $ setType unitType assign {lhs = eLhs, rhs = eRhs}
+
+doTypecheck assign@(Assign {lhs, rhs}) =
+  do eLhs <- typecheck lhs
+     unless (isLval eLhs) $
+            pushError eLhs NonAssignableLHSError
+     context <- asks currentExecutionContext
+     case context of
+       MethodContext mtd ->
+         unless (isConstructor mtd) $
+           assertNotValField eLhs
+       _ -> assertNotValField eLhs
+     eRhs <- hasType rhs (AST.getType eLhs)
+     return $ setType unitType assign {lhs = eLhs, rhs = eRhs}
+ \end{lstlisting}
+ \caption{\label{fig: assign enc}Encore's type checker implementation}
+ \end{subfigure}
+ \qquad
+ \begin{subfigure}[t]{0.4\textwidth}
+ \begin{lstlisting}[language=Haskell,style=encore]
+doTypecheck (Assignment {lhs, rhs}) = do
+  unless (isLVal lhs) $
+    tcError $ NonLValError lhs
+  lhs' <- typecheck lhs
+  let lType = getType lhs'
+  rhs' <- hasType rhs lType
+  checkMutability lhs'
+  return Assignment {etype = Identity UnitType
+                    ,lhs = lhs'
+                    ,rhs = rhs'}
+ \end{lstlisting}
+   \caption{\label{fig: assign paper}Encore's type checker implementation}
+ \end{subfigure}
+ \caption{\label{fig: assignment}Type checking assignments}
+\end{figure*}
+
+
+
+%\newpage
+%\appendix
+%
+%\section{PureScript}
+%\label{app:ps}
+%
+%The following code shows how PureScript handles multiple errors,
+%which is precisely the same design as ours, but encoded differently.
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%-- | Collect errors in in parallel
+%parU :: forall m a b . MonadError MultipleErrors m
+%      => [a] -> (a -> m b) -> m [b]
+%parU xs f = forM xs (withError . f) >>= collectErrors
+%  where
+%    withError :: m b -> m (Either MultipleErrors b)
+%    withError u = catchError (Right <$> u) (return . Left)
+%
+%    collectErrors :: [Either MultipleErrors b] -> m [b]
+%    collectErrors es = case partitionEithers es of
+%      ([], rs) -> return rs
+%      (errs, _) -> throwError $ fold errs
+%\end{lstlisting}
+%\end{minipage}
+%
+%\begin{minipage}[t]{.50\linewidth}
+%\begin{lstlisting}[style=encore]
+%-- | A stack trace for an error
+%newtype MultipleErrors = MultipleErrors
+%  { runMultipleErrors :: [ErrorMessage]
+%  } deriving (Show, Semigroup, Monoid)
+%
+%
+%-- | Runs a computation listening for warnings and then escalating any warnings
+%-- that match the predicate to error status.
+%escalateWarningWhen
+%  :: (MonadWriter MultipleErrors m, MonadError MultipleErrors m)
+%  => (ErrorMessage -> Bool)
+%  -> m a
+%  -> m a
+%escalateWarningWhen isError ma = do
+%  (a, w) <- censor (const mempty) $ listen ma
+%  let (errors, warnings) = partition isError (runMultipleErrors w)
+%  tell $ MultipleErrors warnings
+%  unless (null errors) $ throwError $ MultipleErrors errors
+%  return a
+%
+%
+%-- | Collect errors in in parallel
+%parU
+%  :: forall m a b
+%   . MonadError MultipleErrors m
+%  => [a]
+%  -> (a -> m b)
+%  -> m [b]
+%parU xs f =
+%    forM xs (withError . f) >>= collectErrors
+%  where
+%    withError :: m b -> m (Either MultipleErrors b)
+%    withError u = catchError (Right <$> u) (return . Left)
+%
+%    collectErrors :: [Either MultipleErrors b] -> m [b]
+%    collectErrors es = case partitionEithers es of
+%      ([], rs) -> return rs
+%      (errs, _) -> throwError $ fold errs
+%\end{lstlisting}
+%\end{minipage}
+%
+%The State monad to type check in an ever changing environment:
+%\url{https://github.com/purescript/purescript/blob/master/src/Language/PureScript/TypeChecker.hs\#L226}
+
+%\section{Elm}
+%\label{elm}
+%
+%\begin{minipage}[t]{.50\linewidth}
+%\begin{lstlisting}[style=encore]
+%-- Errors
+%addError :: State -> Error.Error -> State
+%addError (State env rank errors) err = State env rank (err:errors)
+%
+%-- Warnings
+%addUnusedWarning :: W.Context -> [W.Warning] -> Name.Name -> A.Region -> [W.Warning]
+%addUnusedWarning context warnings name region =
+%  W.UnusedVariable region context name : warnings
+%
+%
+%-- Enviroment
+%emptyState :: State
+%emptyState =
+%  State Map.empty (nextMark noMark) []
+%
+%type Env =
+%  Map.Map Name.Name Variable
+%
+%type Pools =
+%  MVector.IOVector [Variable]
+%
+%data State =
+%  State
+%    { _env :: Env
+%    , _mark :: Mark
+%    , _errors :: [Error.Error]
+%    }
+%
+%-- Warnings handled manually
+%addUnusedWarning :: W.Context -> [W.Warning] -> Name.Name -> A.Region -> [W.Warning]
+%addUnusedWarning context warnings name region =
+%  W.UnusedVariable region context name : warnings
+%
+%-- Many functions end up calling these two functions during type checker
+%-- among others.
+%
+%register :: Int -> Pools -> Content -> IO Variable
+%register rank pools content =
+%  do  var <- UF.fresh (Descriptor content rank noMark Nothing)
+%      MVector.modify pools (var:) rank
+%      return var
+%
+%introduce :: Int -> Pools -> [Variable] -> IO ()
+%introduce rank pools variables =
+%  do  MVector.modify pools (variables++) rank
+%      forM_ variables $ \var ->
+%        UF.modify var $ \(Descriptor content _ mark copy) ->
+%          Descriptor content rank mark copy
+%
+%-- Compile returns an Either, and the helper functions to compile must return
+%-- an Either as well, even in cases where one needs to pass things throught.
+%compile :: Pkg.Name -> Map.Map ModuleName.Raw I.Interface -> Src.Module -> Either E.Error Artifacts
+%compile pkg ifaces modul =
+%  do  canonical   <- canonicalize pkg ifaces modul
+%      annotations <- typeCheck modul canonical
+%      ()          <- nitpick canonical
+%      objects     <- optimize modul annotations canonical
+%      return (Artifacts canonical annotations objects)
+%
+%
+%canonicalize :: Pkg.Name -> Map.Map ModuleName.Raw I.Interface -> Src.Module -> Either E.Error Can.Module
+%canonicalize pkg ifaces modul =
+%  case snd $ R.run $ Canonicalize.canonicalize pkg ifaces modul of
+%    Right canonical ->
+%      Right canonical
+%
+%    Left errors ->
+%      Left $ E.BadNames errors
+%
+%
+%typeCheck :: Src.Module -> Can.Module -> Either E.Error (Map.Map Name.Name Can.Annotation)
+%typeCheck modul canonical =
+%  case unsafePerformIO (Type.run =<< Type.constrain canonical) of
+%    Right annotations ->
+%      Right annotations
+%
+%    Left errors ->
+%      Left (E.BadTypes (Localizer.fromModule modul) errors)
+%
+%
+%nitpick :: Can.Module -> Either E.Error ()
+%nitpick canonical =
+%  case PatternMatches.check canonical of
+%    Right () ->
+%      Right ()
+%
+%    Left errors ->
+%      Left (E.BadPatterns errors)
+%\end{lstlisting}
+%\end{minipage}
+
+%\section{Haskell}
+%\label{app: haskell}
+%
+%Haskell uses the same monadic structure for different phases.
+%More concretely, the type checking monad is a specific instance
+%of \ec{TcRnIf TcGblEnv TcLclEnv}. The desugaring phase uses
+%the same monadic structure, but with different types.
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%type TcM  = TcRnIf TcGblEnv TcLclEnv  -- Type Checking Monad
+%type TcRnIf a b = IOEnv (Env a b)
+%newtype IOEnv env a = IOEnv (env -> IO a) deriving (Functor)
+%\end{lstlisting}
+%\end{minipage}
+%
+%\ec{TcM} uses mutable references to keep track of changes that
+%should be returned after type checking. For example,
+%errors and warnings are kept under the environment, in
+%a mutable reference.
+%\ec{tcl_errs} maintain a list of error and warning messages
+%(data type \ec{Messages} in the next code snippet).
+%
+%Warnings are encoded in terms of errors, as follows:
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%type Messages = (WarningMessages, ErrorMessages)
+%type WarningMessages = Bag WarnMsg
+%type ErrorMessages   = Bag ErrMsg
+%type WarnMsg = ErrMsg
+%data ErrMsg = ErrMsg {
+%        errMsgSpan        :: SrcSpan,
+%        errMsgSeverity    :: Severity,
+%        errMsgReason      :: WarnReason,
+%        ...
+%        }
+%\end{lstlisting}
+%\end{minipage}
+%
+%It is interesting to see how similar are the functions that report
+%errors and warnings. The main difference is that warnings
+%where originally errors (line~\ref{code:haskell: makeWarning}),
+%are turned into warnings, and are written into the mutable
+%reference \ec{tcl_errs}~(line~\ref{code:haskell:returnWarning}).
+%Reporting errors is almost the same code, except that one
+%modifies the error reference~(line~\ref{code:haskell: returnError}).
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%getErrsVar :: TcRn (TcRef Messages)
+%getErrsVar = do { env <- getLclEnv; return (tcl_errs env) }
+%
+%reportError :: ErrMsg -> TcRn ()
+%reportError err = do
+%  errs_var <- getErrsVar ;
+%  (warns, errs) <- readTcRef errs_var ;
+%  writeTcRef errs_var (warns, errs `snocBag` err)(*@\label{code:haskell: returnError}@*)
+%
+%reportWarning :: WarnReason -> ErrMsg -> TcRn ()
+%reportWarning reason err = do
+%  let warn = makeIntoWarning reason err (*@\label{code:haskell: makeWarning}@*)
+%  errs_var <- getErrsVar
+%  (warns, errs) <- readTcRef errs_var
+%  writeTcRef errs_var (warns `snocBag` warn, errs)(*@\label{code:haskell:returnWarning}@*)
+%\end{lstlisting}
+%\end{minipage}
+%
+%
+%\section{Source Code}
+%
+%The source code for the type checker can be found in
+%\url{https://github.com/kikofernandez/typechecking-monad}. It contains multiple versions of the compiler, starting
+%from the original simple implementation and monotonically adding
+%more features. There are instructions to see the evolution of the compiler, i.e.,
+%tests that show the different compiler additions.
+%For more documentation, please check the type checker \texttt{README} file in the link above.
+%
+%
+%The type checker source code is a subset of
+%the source code of the Encore compiler, found here
+%\url{https://github.com/parapluu/encore}.
+%\end{document}
+
+%\section{Haskell}
+%\label{app: haskell}
+%
+%Haskell uses the same monadic structure for different phases.
+%More concretely, the type checking monad is a specific instance
+%of \ec{TcRnIf TcGblEnv TcLclEnv}. The desugaring phase uses
+%the same monadic structure, but with different types.
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%type TcM  = TcRnIf TcGblEnv TcLclEnv  -- Type Checking Monad
+%type TcRnIf a b = IOEnv (Env a b)
+%newtype IOEnv env a = IOEnv (env -> IO a) deriving (Functor)
+%\end{lstlisting}
+%\end{minipage}
+%
+%\ec{TcM} uses mutable references to keep track of changes that
+%should be returned after type checking. For example,
+%errors and warnings are kept under the environment, in
+%a mutable reference.
+%\ec{tcl_errs} maintain a list of error and warning messages
+%(data type \ec{Messages} in the next code snippet).
+%
+%Warnings are encoded in terms of errors, as follows:
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%type Messages = (WarningMessages, ErrorMessages)
+%type WarningMessages = Bag WarnMsg
+%type ErrorMessages   = Bag ErrMsg
+%type WarnMsg = ErrMsg
+%data ErrMsg = ErrMsg {
+%        errMsgSpan        :: SrcSpan,
+%        errMsgSeverity    :: Severity,
+%        errMsgReason      :: WarnReason,
+%        ...
+%        }
+%\end{lstlisting}
+%\end{minipage}
+%
+%It is interesting to see how similar are the functions that report
+%errors and warnings. The main difference is that warnings
+%where originally errors (line~\ref{code:haskell: makeWarning}),
+%are turned into warnings, and are written into the mutable
+%reference \ec{tcl_errs}~(line~\ref{code:haskell:returnWarning}).
+%Reporting errors is almost the same code, except that one
+%modifies the error reference~(line~\ref{code:haskell: returnError}).
+%
+%\begin{minipage}[t]{\linewidth}
+%\begin{lstlisting}[style=encore]
+%getErrsVar :: TcRn (TcRef Messages)
+%getErrsVar = do { env <- getLclEnv; return (tcl_errs env) }
+%
+%reportError :: ErrMsg -> TcRn ()
+%reportError err = do
+%  errs_var <- getErrsVar ;
+%  (warns, errs) <- readTcRef errs_var ;
+%  writeTcRef errs_var (warns, errs `snocBag` err)(*@\label{code:haskell: returnError}@*)
+%
+%reportWarning :: WarnReason -> ErrMsg -> TcRn ()
+%reportWarning reason err = do
+%  let warn = makeIntoWarning reason err (*@\label{code:haskell: makeWarning}@*)
+%  errs_var <- getErrsVar
+%  (warns, errs) <- readTcRef errs_var
+%  writeTcRef errs_var (warns `snocBag` warn, errs)(*@\label{code:haskell:returnWarning}@*)
+%\end{lstlisting}
+%\end{minipage}
+%
+%
+%\section{Source Code}
+%
+%The source code for the type checker can be found in
+%\url{https://github.com/kikofernandez/typechecking-monad}. It contains multiple versions of the compiler, starting
+%from the original simple implementation and monotonically adding
+%more features. There are instructions to see the evolution of the compiler, i.e.,
+%tests that show the different compiler additions.
+%For more documentation, please check the type checker \texttt{README} file in the link above.
+%
+%
+%The type checker source code is a subset of
+%the source code of the Encore compiler, found here
+%\url{https://github.com/parapluu/encore}.
+%

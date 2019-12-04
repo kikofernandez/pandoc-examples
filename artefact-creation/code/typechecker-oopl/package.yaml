@@ -1,0 +1,42 @@
+name:                typechecker-oopl
+version:             0.1.0.0
+github:              ""
+license:             BSD3
+author:              "Anonymous"
+maintainer:          "Anonymous"
+copyright:           "MIT"
+
+extra-source-files:
+- README.md
+# - ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            unknown
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:    ""
+
+dependencies:
+- base >= 4.7 && < 5
+- megaparsec >= 7.0.4
+- containers
+- mtl
+
+
+library:
+  source-dirs:
+  - src
+
+tests:
+  typechecker-oopl-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - typechecker-oopl
