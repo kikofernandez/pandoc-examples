@@ -202,4 +202,9 @@ With this final step, everything has been wired. The end result can be seen
 [here in HTML](https://www.plresearcher.com/files/monadic-typechecker/README.html)
 and [here in PDF](https://www.plresearcher.com/files/monadic-typechecker/README.pdf).
 I have created a Github repo that contains all the source code for ease of study and
-reproducibility (here)[https://github.com/kikofernandez/pandoc-examples/artefact-creation].
+reproducibility [here](https://github.com/kikofernandez/pandoc-examples/artefact-creation).
+
+We have used this setup in two conferences, European Conference on Object-Oriented Programming (ECOOP)
+and Software Language Engineering (SLE), where we won the Best Artefact Award.
+
+Please feel free to ask questions :)
