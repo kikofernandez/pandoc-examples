@@ -10,6 +10,7 @@ creation of HTML and PDFs versions of the user documentation, running tests, and
 provisioning of virtual machines with all the software install.
 
 The tools I use are:
+
 - `Makefile` for overall orchestration of all components
 - `haddock` for generation of source code documentation
 - `pandoc` for generation of PDF and HTML from a Markdown file

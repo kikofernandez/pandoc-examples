@@ -60,7 +60,14 @@ ZIP_FILE=updated-artefact.zip
 ##
 ################################
 
+DOCS=README.md
+META=meta.yaml
+
+
 all: doc gen
+
+readme:
+	pandoc -s $(META) $(DOCS) --self-contained -c documentation/assets/pandoc.css -o $(DOCS:md=html)
 
 doc:
 	make -C $(DOC_SRC) $@
