@@ -9,5 +9,6 @@ all: paper
 paper:
 	@pandoc -s -F pandoc-crossref --natbib meta.yaml --template=mytemplate.tex -N \
 	 -f markdown+raw_tex+tex_math_dollars+citations -t latex -o main.tex main.md
-	@pdflatex main.tex > /dev/null 
-	@bibtex main  > /dev/null
+	@pdflatex main.tex > /dev/null 2>&1
+	@bibtex main > /dev/null 2>&1
+	@pdflatex main.tex > /dev/null 2>&1
