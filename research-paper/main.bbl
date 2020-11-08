@@ -1,0 +1,240 @@
+\begin{thebibliography}{32}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Barata et~al.(2013)Barata, Gama, Jorge, and
+  Goncalves]{eng-engineering-gamification}
+G.~Barata, S.~Gama, J.~Jorge, and D.~Goncalves.
+\newblock Engaging engineering students with gamification.
+\newblock pages 1--8, Sept 2013.
+\newblock \doi{10.1109/VS-GAMES.2013.6624228}.
+
+\bibitem[Becker and Nicholson(2016)]{oldwine}
+Katrin Becker and Scott Nicholson.
+\newblock \emph{Gamification in the Classroom: Old Wine in New Badges}.
+\newblock ETC Press, 2016.
+
+\bibitem[Berkling and Thomas(2013)]{Berkling}
+K.~Berkling and C.~Thomas.
+\newblock Gamification of a software engineering course and a detailed analysis
+  of the factors that lead to it's failure.
+\newblock In \emph{2013 International Conference on Interactive Collaborative
+  Learning (ICL)}, pages 525--530, Kazan, Russia, Sept 2013. IEEE.
+\newblock \doi{10.1109/ICL.2013.6644642}.
+
+\bibitem[Biggs(1996)]{biggs1996}
+John Biggs.
+\newblock Enhancing teaching through constructive alignment.
+\newblock \emph{Higher Education}, 32:\penalty0 374--364, 1996.
+
+\bibitem[Biggs and Tang(2011)]{biggsTang2011}
+John Biggs and Catherine Tang.
+\newblock \emph{Teaching For Quality Learning At University}.
+\newblock McGraw-Hill International, 2011.
+
+\bibitem[Bloom(1974)]{bloom1974}
+B.~S Bloom.
+\newblock An introduction to mastery learning theory.
+\newblock In J.~H. Block, editor, \emph{Schools, society, and mastery
+  learning}. Holt, Rinehart \& Winston, New York, 1974.
+
+\bibitem[{Bologna Declaration}(1999)]{bolognaDeclaration}
+{Bologna Declaration}.
+\newblock Towards the european higher european area.
+\newblock In \emph{Conference of Ministers responsible for Higher Education in
+  29 European countries}, Bologna, Italy, June 1999.
+
+\bibitem[Clark(2013)]{clark2013}
+Tony Clark.
+\newblock Computer science: An approach to teaching and learning.
+\newblock
+  \url{http://clarktony.blogspot.co.uk/2013/12/computer-science-approach-to-teaching.html},
+  December 2013.
+\newblock Blog post.
+
+\bibitem[de~Freitas and de~Freitas(2013)]{freitas-twice}
+Adrian~A. de~Freitas and Michelle~M. de~Freitas.
+\newblock Classroom live: a software-assisted gamification tool.
+\newblock \emph{Computer Science Education}, 23\penalty0 (2):\penalty0
+  186--206, 2013.
+\newblock \doi{10.1080/08993408.2013.780449}.
+\newblock URL \url{https://doi.org/10.1080/08993408.2013.780449}.
+
+\bibitem[de~Paz(2013)]{gamification-thesis}
+B.~Merino de~Paz.
+\newblock \emph{Gamification: A tool to improve sustainability efforts,}.
+\newblock PhD thesis, The University of Manchester, 2013.
+
+\bibitem[de~Sousa~Borges et~al.(2014)de~Sousa~Borges, Durelli, Reis, and
+  Isotani]{deSousaBorges:2014:SMG:2554850.2554956}
+Simone de~Sousa~Borges, Vinicius H.~S. Durelli, Helena~Macedo Reis, and Seiji
+  Isotani.
+\newblock A systematic mapping on gamification applied to education.
+\newblock In \emph{Proceedings of the 29th Annual ACM Symposium on Applied
+  Computing}, SAC '14, pages 216--222, New York, NY, USA, 2014. ACM.
+\newblock ISBN 978-1-4503-2469-4.
+\newblock \doi{10.1145/2554850.2554956}.
+\newblock URL \url{http://doi.acm.org/10.1145/2554850.2554956}.
+
+\bibitem[Deci and Ryan(1985)]{intrinsic-book}
+Edward Deci and Richard Ryan.
+\newblock Intrinsic motivation and self-determination in human behavior.
+\newblock \emph{Contemporary Sociology}, 3, 01 1985.
+
+\bibitem[Deterding et~al.(2011)Deterding, Dixon, Khaled, and
+  Nacke]{deterding2011game}
+Sebastian Deterding, Dan Dixon, Rilla Khaled, and Lennart Nacke.
+\newblock From game design elements to gamefulness: defining gamification.
+\newblock In \emph{Proceedings of the 15th international academic MindTrek
+  conference: Envisioning future media environments}, pages 9--15, New York,
+  NY, USA, 2011. ACM, ACM.
+
+\bibitem[Dicheva et~al.(2015)Dicheva, Dichev, Agre, and
+  Angelova]{dicheva2015gamification}
+Darina Dicheva, Christo Dichev, Gennady Agre, and Galia Angelova.
+\newblock Gamification in education: a systematic mapping study.
+\newblock \emph{Journal of Educational Technology \& Society}, 18\penalty0
+  (3):\penalty0 75, 2015.
+
+\bibitem[Glover(2013)]{glover2013play}
+Ian Glover.
+\newblock Play as you learn: gamification as a technique for motivating
+  learners.
+\newblock In \emph{EdMedia: World Conference on Educational Media and
+  Technology}, pages 1999--2008, Waynesville, NC, 2013. Association for the
+  Advancement of Computing in Education (AACE).
+
+\bibitem[Hair et~al.(2009)Hair, Black, Babin, and
+  Anderson]{hair2010multivariate}
+Joseph~F. Hair, William~C. Black, Barry~J. Babin, and Rolph~E. Anderson.
+\newblock \emph{{Multivariate Data Analysis (7th Edition)}}.
+\newblock Prentice Hall, 7 edition, February 2009.
+\newblock ISBN 0138132631.
+
+\bibitem[Hattie(2012)]{hattie2012}
+John Hattie.
+\newblock \emph{Visible Learning for Teachers: Maximizing the Impact on
+  Learners}.
+\newblock Routledge, 2012.
+
+\bibitem[Huang and Soman(2013)]{huang2013gamification}
+Wendy Hsin-Yuan Huang and Dilip Soman.
+\newblock Gamification of education.
+\newblock \emph{Research Report Series: Behavioural Economics in Action, Rotman
+  School of Management, University of Toronto}, 2013.
+
+\bibitem[J.(2012)]{gamification-brain-trust}
+Williams J.
+\newblock The gamification brain trust: Intrinsically motivating people to
+  change behavior (part 2).
+\newblock
+  https://venturebeat.com/2012/09/22/the-gamification-brain-trust-intrinsically-motivating-people-to-change-behavior-part-2/,
+  2012.
+
+\bibitem[Lee and Hammer(2011)]{leeHammer2011}
+J.~J. Lee and J.~Hammer.
+\newblock Gamification in education: What, how, why bother?
+\newblock \emph{Acad. Exchange Quart.}, 15\penalty0 (2):\penalty0 1--15, 2011.
+
+\bibitem[Mora et~al.(2015)Mora, Riera, Gonzalez, and
+  Arnedo-Moreno]{review-gamification-framework}
+A.~Mora, D.~Riera, C.~Gonzalez, and J.~Arnedo-Moreno.
+\newblock A literature review of gamification design frameworks.
+\newblock In \emph{2015 7th International Conference on Games and Virtual
+  Worlds for Serious Applications (VS-Games)}, pages 1--8. IEEE, Sept 2015.
+\newblock \doi{10.1109/VS-GAMES.2015.7295760}.
+
+\bibitem[O'Donovan et~al.(2013)O'Donovan, Gain, and Marais]{ODonovan}
+Siobhan O'Donovan, James Gain, and Patrick Marais.
+\newblock A case study in the gamification of a university-level games
+  development course.
+\newblock In \emph{Proceedings of the South African Institute for Computer
+  Scientists and Information Technologists Conference}, SAICSIT '13, pages
+  242--251, New York, NY, USA, 2013. ACM.
+\newblock ISBN 978-1-4503-2112-9.
+\newblock \doi{10.1145/2513456.2513469}.
+\newblock URL \url{http://doi.acm.org/10.1145/2513456.2513469}.
+
+\bibitem[Rust et~al.(2003)Rust, Price, and O'Donovan]{rustPrice2003}
+Chris Rust, Margaret Price, and Berry O'Donovan.
+\newblock Improving students' learning by developing their understanding of
+  assessment criteria and processes.
+\newblock \emph{Assessment {\&} Evaluation in Higher Education}, 28\penalty0
+  (2):\penalty0 147--164, 2003.
+
+\bibitem[Ryan and Deci(2000{\natexlab{a}})]{psychologyMotivation}
+Richard Ryan and Edward Deci.
+\newblock Self-determination theory and the facilitation of intrinsic
+  motivation, social development, and well-being.
+\newblock \emph{American Psychologist}, 55:\penalty0 68--78, 02
+  2000{\natexlab{a}}.
+
+\bibitem[Ryan and Deci(2000{\natexlab{b}})]{RYAN200054}
+Richard~M. Ryan and Edward~L. Deci.
+\newblock Intrinsic and extrinsic motivations: Classic definitions and new
+  directions.
+\newblock \emph{Contemporary Educational Psychology}, 25\penalty0 (1):\penalty0
+  54 -- 67, 2000{\natexlab{b}}.
+\newblock ISSN 0361-476X.
+\newblock \doi{https://doi.org/10.1006/ceps.1999.1020}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S0361476X99910202}.
+
+\bibitem[Seaborn and Fels(2015)]{SEABORN201514}
+Katie Seaborn and Deborah~I. Fels.
+\newblock Gamification in theory and action: A survey.
+\newblock \emph{International Journal of Human-Computer Studies}, 74:\penalty0
+  14 -- 31, 2015.
+\newblock ISSN 1071-5819.
+\newblock \doi{https://doi.org/10.1016/j.ijhcs.2014.09.006}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S1071581914001256}.
+
+\bibitem[Todor and Pitică(2013)]{todor}
+V.~Todor and D.~Pitică.
+\newblock The gamification of the study of electronics in dedicated e-learning
+  platforms.
+\newblock In \emph{Proceedings of the 36th International Spring Seminar on
+  Electronics Technology}, pages 428--431. IEEE, May 2013.
+\newblock \doi{10.1109/ISSE.2013.6648287}.
+
+\bibitem[Van~Hentenryck and Coffrin(2014)]{gamification-leaderboard-benefits}
+Pascal Van~Hentenryck and Carleton Coffrin.
+\newblock Teaching creative problem solving in a mooc.
+\newblock In \emph{SIGCSE 2014 - Proceedings of the 45th ACM Technical
+  Symposium on Computer Science Education}, pages 677--682, New York, NY, USA,
+  03 2014. ACM.
+
+\bibitem[Villagrasa and Duran(2013)]{Villagrasa}
+Sergi Villagrasa and Jaume Duran.
+\newblock Gamification for learning 3d computer graphics arts.
+\newblock In \emph{Proceedings of the First International Conference on
+  Technological Ecosystem for Enhancing Multiculturality}, TEEM '13, pages
+  429--433, New York, NY, USA, 2013. ACM.
+\newblock ISBN 978-1-4503-2345-1.
+\newblock \doi{10.1145/2536536.2536602}.
+\newblock URL \url{http://doi.acm.org/10.1145/2536536.2536602}.
+
+\bibitem[Wrigstad and Castegren(2017)]{wrigstad2017mastery}
+Tobias Wrigstad and Elias Castegren.
+\newblock Mastery learning-like teaching with achievements.
+\newblock In \emph{SPLASH-E}, 2017.
+
+\bibitem[Zichermann and Cunningham(2011)]{zichermann2011gamification}
+G.~Zichermann and C.~Cunningham.
+\newblock \emph{Gamification by Design: Implementing Game Mechanics in Web and
+  Mobile Apps}.
+\newblock O'Reilly Series. O'Reilly Media, 2011.
+\newblock ISBN 9781449397678.
+
+\bibitem[Zimmerman and Pons(1986)]{zimmerman1986}
+Barry~J. Zimmerman and Manuel~Martinez Pons.
+\newblock Development of a structured interview for assessing student use of
+  self-regulated learning strategies.
+\newblock \emph{American Educational Research Journal}, 23:\penalty0 614--628,
+  1986.
+
+\end{thebibliography}

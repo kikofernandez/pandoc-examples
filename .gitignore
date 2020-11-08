@@ -1,2 +1,7 @@
 .*
 *.*~
+*.aux
+*.bbl
+*.blg
+*.out
+*.log
